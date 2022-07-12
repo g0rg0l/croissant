@@ -10,7 +10,7 @@ class Player : public sf::Transformable, public  sf::Drawable
 
 public:
     /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-    Player(const std::string &fileName, float SPEED);
+    Player(float SPEED);
 
     /////////////////////////////////// Отрисовка ///////////////////////////////////
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

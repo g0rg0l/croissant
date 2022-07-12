@@ -3,10 +3,10 @@
 #include <utility>
 
 /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-Player::Player(const std::string &fileName, float SPEED)
+Player::Player(float SPEED)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
-    textureHolder.loadFromFile("../Entity/Player/images/" + fileName, "player");
+    textureHolder.loadFromFile("../Entity/Player/images/player.png", "player");
 
     sf::Texture *texture = textureHolder.getResource("player");
     sprite.setTexture(*texture);
