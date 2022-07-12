@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <utility>
+
 /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
 Player::Player(const std::string &fileName, float SPEED)
 {
@@ -20,7 +22,7 @@ void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
 }
 
 /////////////////////////////////// Перемещение ///////////////////////////////////
-void Player::move(float dt, std::vector<sf::FloatRect> wallBounds, sf::View *view) // Передвижение игрока
+void Player::move(float dt, const std::vector<sf::FloatRect>& wallBounds, sf::View *view) // Передвижение игрока
 {
     resetMoveOptions(); // Обнуляем вектор скорости
     checkMove(dt); // Считываем управление и вычисляем вектор скорости
@@ -34,7 +36,7 @@ void Player::move(float dt, std::vector<sf::FloatRect> wallBounds, sf::View *vie
     setPosition(sprite.getPosition()); // Запоминаем координаты объекта Player
 }
 
-void Player::checkWallCollision(std::vector<sf::FloatRect> allWallBounds)
+void Player::checkWallCollision(const std::vector<sf::FloatRect>& allWallBounds) // Проверка коллизии со стенами
 {
     sf::FloatRect playerBounds = sprite.getGlobalBounds();
     sf::FloatRect nextPos(
@@ -112,4 +114,10 @@ void Player::checkMove(float dt) // Считывание управления и
 void Player::resetMoveOptions() // Обнуление вектора скорости
 {
     velocity = sf::Vector2f(0, 0);
+}
+
+/////////////////////////////////// Геттеры ///////////////////////////////////
+sf::Sprite Player::getSprite()
+{
+    return sprite;
 }

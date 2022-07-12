@@ -5,6 +5,7 @@
 #include <cstring>
 #include <sstream>
 
+/////////////////////////////////// Конструктор ///////////////////////////////////
 TileMap::TileMap(int LEVEL)
 {
     level = LEVEL;
@@ -16,9 +17,23 @@ TileMap::TileMap(int LEVEL)
     }
 }
 
+/////////////////////////////////// Отрисовка ///////////////////////////////////
+void TileMap::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    TextureHolder& textureHolder = TextureHolder::getInstance();
+    sf::Texture *texture;
+
+    if (level == 1)
+    {
+        texture = textureHolder.getResource("mapTileSet1");
+    }
+
+    target.draw(vertexArray, texture);
+}
+
+/////////////////////////////////// Загрузка карты ///////////////////////////////////
 bool TileMap::load(std::vector<int> tiles)
 {
-
     int width = mapSizes.x;
     int height = mapSizes.y;
 
@@ -37,6 +52,7 @@ bool TileMap::load(std::vector<int> tiles)
 
             if (id > 0)
             {
+                /* Загрузка карты через VertexArray */
                 sf::Vertex* quad = &vertexArray[(i + j * width) * 4];
 
                 quad[0].position = sf::Vector2f(i * tileSizes.x, j * tileSizes.y);
@@ -54,7 +70,7 @@ bool TileMap::load(std::vector<int> tiles)
                 quad[2].texCoords = sf::Vector2f(texLeftTop.x + tileSizes.x, texLeftTop.y + tileSizes.y);
                 quad[3].texCoords = sf::Vector2f(texLeftTop.x, texLeftTop.y + tileSizes.y);
 
-                /* Если id текущего тайла есть в списке id всех стен на карте */
+                /* Загрузка GlobalBouds стен на карте */
                 if (std::find(std::begin(wallIds), std::end(wallIds), id) != std::end(wallIds))
                 {
                     wallBounds.push_back(sf::FloatRect(quad[0].position.x, quad[0].position.y, tileSizes.x, tileSizes.y));
@@ -66,23 +82,9 @@ bool TileMap::load(std::vector<int> tiles)
     return true;
 }
 
-void TileMap::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    TextureHolder& textureHolder = TextureHolder::getInstance();
-    sf::Texture *texture;
-
-    if (level == 1)
-    {
-        texture = textureHolder.getResource("mapTileSet1");
-    }
-
-    target.draw(vertexArray, texture);
-}
-
 void TileMap::readMapFromFile()
 {
-    ////////////////////////////// Получение map //////////////////////////////
-
+    /* Получение map */
     std::ifstream mapFile("../Levels/maps/level_1.tmx");
     rapidxml::xml_document<> mapDoc;
 
@@ -106,8 +108,7 @@ void TileMap::readMapFromFile()
             ids.push_back(id);
     }
 
-    ////////////////////////////// Получение objects //////////////////////////////
-
+    /* Получение objects */
     std::ifstream objectsFile("../Levels/maps/level_1.tsx");
     rapidxml::xml_document<> objectsDoc;
 
@@ -127,22 +128,20 @@ void TileMap::readMapFromFile()
         curNode = curNode->next_sibling();
     }
 
-    ////////////////////////////// Получение артибутов карты //////////////////////////////
-
+    /* Получение артибутов карты */
     curNode = mapDoc.first_node("map");
 
     rapidxml::xml_attribute<> *width = curNode->first_attribute("width");
     rapidxml::xml_attribute<> *height = curNode->first_attribute("height");
     rapidxml::xml_attribute<> *tileWidth = curNode->first_attribute("tilewidth");
     rapidxml::xml_attribute<> *tileHeight = curNode->first_attribute("tileheight");
-
-    ////////////////////////////// Присвоение атрибутов //////////////////////////////
-
+    /* Присвоение атрибутов */
     map = ids;
     mapSizes = sf::Vector2i(atoi(width->value()), atoi(height->value()));
     tileSizes = sf::Vector2i(atoi(tileWidth->value()), atoi(tileHeight->value()));
 }
 
+/////////////////////////////////// Общая функция загрузки карты ///////////////////////////////////
 void TileMap::buildMap()
 {
     readMapFromFile();

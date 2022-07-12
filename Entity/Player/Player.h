@@ -16,10 +16,13 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     /////////////////////////////////// Перемещение ///////////////////////////////////
-    void move(float dt, std::vector<sf::FloatRect> wallBounds, sf::View *view);
+    void move(float dt, const std::vector<sf::FloatRect>& wallBounds, sf::View *view);
     void resetMoveOptions();
-    void checkWallCollision(std::vector<sf::FloatRect> wallBounds);
+    void checkWallCollision(const std::vector<sf::FloatRect>& wallBounds);
     void checkMove(float dt);
+
+    /////////////////////////////////// Геттеры ///////////////////////////////////
+    sf::Sprite getSprite();
 
 private:
     /* Спрайт */
