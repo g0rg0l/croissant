@@ -13,7 +13,7 @@ TileMap::TileMap(int LEVEL)
     TextureHolder& textureHolder = TextureHolder::getInstance();
     if (level == 1)
     {
-        textureHolder.loadFromFile("../Levels/images/mapTileSet1.png", "mapTileSet1");
+        textureHolder.loadFromFile("../Levels/images/level_1_tileSet.png", "mapTileSet1");
     }
 }
 

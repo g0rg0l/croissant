@@ -3,30 +3,31 @@
 /////////////////////////////////// Window ///////////////////////////////////
 Engine::Engine() // Конструктор, инициализирующий экран с параметрами и камеру
 {
-    window.create(sf::VideoMode({windowWidth, windowHeight}),
+    window.create(videoMode,
                   "croissant",
                   sf::Style::Fullscreen
                   );
 
-    view.setSize(sf::Vector2f(windowWidth / 5, windowHeight / 5));
+    view.setSize((float) videoMode.width / viewScale, (float) videoMode.height / viewScale);
 }
 
 /////////////////////////////////// Main loop ///////////////////////////////////
 void Engine::runEngine() // Метод, запускающий игру
 {
+    screens.showMainMenu(window);
+
     globals.map.buildMap();
 
     while (window.isOpen())
     {
         float deltaTime = clock.restart().asSeconds();
 
-        globals.player.move(deltaTime, globals.map.wallBounds, &view);
-
-        if (globals.mob.isSeePlayer(globals.player, globals.map.wallBounds))
+        if (!fightScreen.isFighting)
         {
-            std::cout << "I see you" << std::endl;
+            globals.player.move(deltaTime, globals.map.wallBounds, &view);
+            globals.updateAllMobs(fightScreen);
         }
-
+        fightScreen.updateFight(globals.allMobs);
         checkEvents();
         draw();
     }
@@ -61,11 +62,17 @@ void Engine::draw() // Метод, вызывающий отрисовку вс�
     /* Карта */
     window.draw(globals.map);
 
-    /* тестовый моб */
-    window.draw(globals.mob);
+    /* Мобы */
+    for (auto &mob : globals.allMobs)
+    {
+        window.draw(mob);
+    }
 
     /* Игрок */
     window.draw(globals.player);
+
+    /* Бой */
+    window.draw(fightScreen);
 
     /* Отображение экрана */
     window.display();

@@ -6,6 +6,8 @@
 #include <iostream>
 
 #include "Globals.h"
+#include "Screens/Screens.h"
+#include "Screens/FightScreen.h"
 
 class Engine
 {
@@ -24,14 +26,18 @@ public:
 
 private:
     /////////////////////////////////// Параметры окна ///////////////////////////////////
-    const unsigned int windowWidth = 1920;
-    const unsigned int windowHeight = 1080;
+    sf::VideoMode videoMode = sf::VideoMode::getDesktopMode();
 
     sf::RenderWindow window; // Отображаемое окно
+
     sf::View view; // Камера
+    float viewScale = 5.f;
+
     sf::Clock clock; // Время в игре
 
     Globals globals; // Объект, через который будет происходить взаимодействие со всеми объектами на карте
+    Screens screens; // Объект, хранящий все экраны в игре и работающий с ними
+    FightScreen fightScreen = FightScreen(videoMode.width, videoMode.height, viewScale);
 };
 
 

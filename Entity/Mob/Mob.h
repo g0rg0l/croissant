@@ -22,12 +22,20 @@ public:
     /* Видит ли игрока */
     bool isSeePlayer(Player &player, const std::vector<sf::FloatRect> &allWallBounds);
 
+    /////////////////////////////////// Бой ///////////////////////////////////
+    int getHp() {return hp;}
+
+    void getDamage(int damage) {hp -= damage;}
+
 private:
     /* Спрайт */
     sf::Sprite sprite;
 
     /* Дальность видимости */
-    const int visDistance = 100;
+    int visDistance = 100;
+
+    /* Бой */
+    int hp = 100;
 
 };
 

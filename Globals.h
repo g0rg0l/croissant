@@ -2,10 +2,12 @@
 #define CROISSANT_GLOBALS_H
 
 #include "SFML/Graphics.hpp"
+#include <iostream>
 
-#include "Entity/Player/Player.h" // Игрок
+#include "Entity/Player/Player.h"
 #include "Entity/Mob/Mob.h"
-#include "Levels/TileMap.h" // Карта
+#include "Levels/TileMap.h"
+#include "Screens/FightScreen.h"
 
 class Globals
 {
@@ -15,7 +17,9 @@ public:
     Player player = Player(100.f);
 
     /////////////////////////////////// Мобы ///////////////////////////////////
-    Mob mob = Mob();
+    std::vector<Mob> allMobs = {Mob()};
+
+    void updateAllMobs(FightScreen &fightScreen);
 
     /////////////////////////////////// Карта ///////////////////////////////////
     TileMap map = TileMap(1);
@@ -25,6 +29,5 @@ private:
 
 
 };
-
 
 #endif //CROISSANT_GLOBALS_H

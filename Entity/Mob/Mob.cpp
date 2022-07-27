@@ -4,12 +4,12 @@
 Mob::Mob()
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
-    textureHolder.loadFromFile("../Entity/Mob/images/mob.png", "mob");
+    textureHolder.loadFromFile("../Entity/Mob/images/mob1.png", "mob1");
 
-    sf::Texture *texture = textureHolder.getResource("mob");
+    sf::Texture *texture = textureHolder.getResource("mob1");
     sprite.setTexture(*texture);
 
-    sprite.setPosition(sf::Vector2f(60, 244));
+    sprite.setPosition(sf::Vector2f(100, 280));
 }
 
 /////////////////////////////////// Отрисовка ///////////////////////////////////

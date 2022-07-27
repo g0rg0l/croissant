@@ -30,8 +30,8 @@ void Player::move(float dt, const std::vector<sf::FloatRect>& wallBounds, sf::Vi
     sprite.move(velocity); // Передвигаем спрайт
 
     view->setCenter(
-            sprite.getGlobalBounds().left + sprite.getGlobalBounds().width,
-            sprite.getGlobalBounds().top + sprite.getGlobalBounds().height
+            sprite.getGlobalBounds().left + sprite.getGlobalBounds().width / 2,
+            sprite.getGlobalBounds().top + sprite.getGlobalBounds().height / 2
             );
     setPosition(sprite.getPosition()); // Запоминаем координаты объекта Player
 }

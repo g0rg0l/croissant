@@ -24,6 +24,11 @@ public:
     /////////////////////////////////// Геттеры ///////////////////////////////////
     sf::Sprite getSprite();
 
+    /////////////////////////////////// Бой ///////////////////////////////////
+    int getHp() {return hp;}
+
+    void getDamage(int damage) {hp -= damage;}
+
 private:
     /* Спрайт */
     sf::Sprite sprite;
@@ -31,6 +36,9 @@ private:
     /* Скорость */
     sf::Vector2f velocity; // Вектор перемещения
     float speed; // Скорость перемещения
+
+    /* Бой */
+    int hp = 100;
 
 };
 
