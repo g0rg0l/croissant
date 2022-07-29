@@ -12,7 +12,7 @@ class Mob : public sf::Transformable, public  sf::Drawable
 {
 public:
     /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-    Mob();
+    Mob(sf::Vector2f coordinates);
 
     /////////////////////////////////// Отрисовка ///////////////////////////////////
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

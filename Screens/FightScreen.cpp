@@ -11,16 +11,16 @@ void FightScreen::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     if (isFighting)
     {
-        sf::Vector2f backgroundShapeSize((float) mainWindowWidth / mainViewScale * 3/4,
-                                         (float) mainWindowHeight / mainViewScale * 3/4);
+//        sf::Vector2f backgroundShapeSize((float) mainWindowWidth / mainViewScale * 3/4,
+//                                         (float) mainWindowHeight / mainViewScale * 3/4);
+//
+//        sf::RectangleShape backgroundShape(backgroundShapeSize);
+//        backgroundShape.setFillColor(sf::Color::Blue);
+//        backgroundShape.setPosition(sf::Vector2f(
+//                player->getPosition().x + player->getSprite().getGlobalBounds().width / 2 - backgroundShapeSize.x / 2,
+//                player->getPosition().y + player->getSprite().getGlobalBounds().height / 2 - backgroundShapeSize.y / 2
+//                ));
 
-        sf::RectangleShape backgroundShape(backgroundShapeSize);
-        backgroundShape.setFillColor(sf::Color::Blue);
-        backgroundShape.setPosition(sf::Vector2f(
-                player->getPosition().x + player->getSprite().getGlobalBounds().width / 2 - backgroundShapeSize.x / 2,
-                player->getPosition().y + player->getSprite().getGlobalBounds().height / 2 - backgroundShapeSize.y / 2
-                ));
-//        backgroundShape.setPosition((sf::Vector2f(-24.383, 204.921)));
 //        sf::Font font;
 //        font.loadFromFile("../Screens/arial.ttf");
 //
@@ -38,9 +38,14 @@ void FightScreen::draw(sf::RenderTarget &target, sf::RenderStates states) const
 //        mobName.setCharacterSize(8);
 //        mobName.setPosition(sf::Vector2f(100, 244));
 
-        target.draw(backgroundShape, states);
+//        target.draw(backgroundShape, states);
 //        target.draw(playerName, states);
 //        target.draw(mobName, states);
+
+        for (auto& sprite : screenElements)
+        {
+            target.draw(sprite, states);
+        }
     }
 }
 
@@ -51,6 +56,9 @@ void FightScreen::enableFight(Player &PLAYER, Mob &MOB, int newId)
     player = &PLAYER;
     mob = &MOB;
     mobIndex = newId;
+
+    // тут будем вызывать функцию, которая будет перезаписывать вектор элементов окна файтинга
+    loadFightScreenElements();
 }
 
 void FightScreen::updateFight(std::vector<Mob> &allMobs)
@@ -83,4 +91,29 @@ void FightScreen::disableFight()
     mob = nullptr;
     player = nullptr;
     mobIndex = -1;
+
+    screenElements.clear();
+}
+
+void FightScreen::loadFightScreenElements()
+{
+    /* Получение TextureHolde'а и добавление/получение всех текстур для элементов */
+    TextureHolder& textureHolder = TextureHolder::getInstance();
+
+    textureHolder.loadFromFile("../Screens/blue.png", "fightScreenBackground"); // Задний фон
+
+    /* Задний фон */
+    sf::Sprite background;
+
+    sf::Texture *texture = textureHolder.getResource("fightScreenBackground");
+    sf::Vector2u backgroundTextureSizes = texture->getSize();
+    background.setTexture(*texture);
+
+
+    background.setPosition(sf::Vector2f(
+            player->getPosition().x + player->getSprite().getGlobalBounds().width / 2 - (float) backgroundTextureSizes.x / 2,
+            player->getPosition().y + player->getSprite().getGlobalBounds().height / 2 - (float) backgroundTextureSizes.y / 2
+    ));
+
+    screenElements.push_back(background);
 }

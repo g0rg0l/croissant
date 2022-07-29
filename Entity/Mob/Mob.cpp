@@ -1,7 +1,7 @@
 #include "Mob.h"
 
 /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-Mob::Mob()
+Mob::Mob(sf::Vector2f coordinates)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
     textureHolder.loadFromFile("../Entity/Mob/images/mob1.png", "mob1");
@@ -9,7 +9,7 @@ Mob::Mob()
     sf::Texture *texture = textureHolder.getResource("mob1");
     sprite.setTexture(*texture);
 
-    sprite.setPosition(sf::Vector2f(100, 280));
+    sprite.setPosition(coordinates);
 }
 
 /////////////////////////////////// Отрисовка ///////////////////////////////////

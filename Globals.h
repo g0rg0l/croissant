@@ -17,7 +17,7 @@ public:
     Player player = Player(100.f);
 
     /////////////////////////////////// Мобы ///////////////////////////////////
-    std::vector<Mob> allMobs = {Mob()};
+    std::vector<Mob> allMobs = {Mob(sf::Vector2f(50, 260)), Mob(sf::Vector2f(250, 250)), Mob(sf::Vector2f(250, 50))};
 
     void updateAllMobs(FightScreen &fightScreen);
 

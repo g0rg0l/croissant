@@ -5,6 +5,7 @@
 
 #include "../Entity/Mob/Mob.h"
 #include "../Entity/Player/Player.h"
+#include "../Resources/ResourceHolder.h"
 
 class FightScreen : public sf::Drawable
 {
@@ -21,9 +22,15 @@ public:
     bool isFighting = false;
 
 private:
+    /* Параметры экрана и окна файтинга */
     unsigned int mainWindowWidth;
     unsigned int mainWindowHeight;
     float mainViewScale;
+
+    /* Вектор всех спрайтов, составляющих окно файтинга */
+    std::vector<sf::Sprite> screenElements;
+    void loadFightScreenElements();
+
     /* Корректная проверка нажатий на клавиатуру */
     bool keyWasPressed = false;
 
