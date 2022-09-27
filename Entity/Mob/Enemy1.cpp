@@ -1,8 +1,8 @@
 #include "Enemy1.h"
 
 /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-Enemy1::Enemy1(sf::Vector2f position, const std::string &textureHolderKey) :
-    Mob(position, textureHolderKey)
+Enemy1::Enemy1(sf::Vector2f position, const std::string &textureHolderKey, const std::string& name)
+    : Mob(position, textureHolderKey, name)
 {
     loadSprite();
     loadPosition();

@@ -32,8 +32,8 @@ private:
     /* Меню боя */
     std::vector<FIGHT_GUI::AttackButton> allFightMenuButtons;
     std::vector<FIGHT_GUI::HPBar> allHPBars;
-    void loadHpBars(Player* player, Mob* mob);
-    void loadFightMenuElements();
+    std::vector<FIGHT_GUI::FightersIconFrame> allFightersIconFrames;
+    void loadFightMenuElements(Player* player, Mob* mob);
 
     /* тест интерфейса */
     sf::Sprite fightBackground;

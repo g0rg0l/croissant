@@ -1,10 +1,11 @@
 #include "Mob.h"
 
 /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-Mob::Mob(sf::Vector2f position, const std::string& textureHolderKey)
+Mob::Mob(sf::Vector2f position, const std::string& textureHolderKey, const std::string& name)
 {
     this->position = position;
     this->textureHolderKey = textureHolderKey;
+    this->name = name;
 }
 
 void Mob::loadPosition()

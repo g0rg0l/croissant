@@ -7,7 +7,7 @@ class Enemy1 : public Mob
 {
 public:
     /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-    Enemy1(sf::Vector2f position, const std::string &textureHolderKey);
+    Enemy1(sf::Vector2f position, const std::string &textureHolderKey, const std::string& name);
 
     /////////////////////////////////// Создание моба ///////////////////////////////////
     void setPreferences() override; // Загрузка параметров персонажа

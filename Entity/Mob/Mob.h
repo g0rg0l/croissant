@@ -12,7 +12,7 @@ class Mob : public  sf::Drawable
 {
 public:
     /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-    explicit Mob(sf::Vector2f position, const std::string &textureHolderKey);
+    explicit Mob(sf::Vector2f position, const std::string &textureHolderKey, const std::string& name);
 
     /////////////////////////////////// Отрисовка ///////////////////////////////////
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -24,6 +24,9 @@ public:
     int getHp() const {return hp;}
 
     void takeDamage(int damage) { hp -= damage;}
+
+    /////////////////////////////////// Информация ///////////////////////////////////
+    std::string getName() {return name;}
 
 protected:
     /////////////////////////////////// Создание моба ///////////////////////////////////
@@ -45,6 +48,8 @@ protected:
     /* Бой */
     int hp = 0;
 
+    /* Информация */
+    std::string name;
 };
 
 

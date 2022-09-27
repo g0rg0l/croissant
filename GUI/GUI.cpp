@@ -3,58 +3,56 @@
 using namespace FIGHT_GUI;
 
 /////////////////////////////////// AttackButton ///////////////////////////////////
-AttackButton::AttackButton(sf::RenderWindow* window, const std::string& fileName, sf::Vector2f position)
-    : fileName(fileName), window(window)
+void AttackButton::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    target.draw(iconSprite, states);
+    if (isHovered) target.draw(frameSprite_hovered, states);
+    else target.draw(frameSprite_normal, states);
+}
+
+AttackButton::AttackButton(sf::RenderWindow *window, Player *player, Mob* mob, const std::string &iconFileName, sf::Vector2f position)
+    : window(window), player(player), mob(mob)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/" + fileName + "_normal" + ".png", fileName + "_normal");
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/" + fileName + "_hovered" + ".png", fileName + "_hovered");
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/" + fileName + "_clicked" + ".png", fileName + "_clicked");
-    sf::Texture *texture = textureHolder.getResource(fileName + "_normal");
-    sprite.setTexture(*texture);
-    sprite.setScale(sf::Vector2f(
-            (float) window->getSize().x / 1920,
-            (float) window->getSize().y / 1080
-    ));
-    sprite.setPosition(position);
+
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/frame_normal.png", "fightButtonFrame_normal");
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/frame_hovered.png", "fightButtonFrame_hovered");
+    sf::Texture* frameNormal = textureHolder.getResource("fightButtonFrame_normal");
+    sf::Texture* frameHovered = textureHolder.getResource("fightButtonFrame_hovered");
+    frameSprite_normal.setTexture(*frameNormal);
+    frameSprite_hovered.setTexture(*frameHovered);
+    frameSprite_normal.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                      (float) window->getSize().y / 1080));
+    frameSprite_hovered.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                      (float) window->getSize().y / 1080));
+    frameSprite_normal.setPosition(position.x * (float) window->getSize().x / 1920,
+                            position.y * (float) window->getSize().y / 1080);
+    frameSprite_hovered.setPosition(position.x * (float) window->getSize().x / 1920,
+                            position.y * (float) window->getSize().y / 1080);
+
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/" + iconFileName + ".png", "fightButton" + iconFileName);
+    sf::Texture* icon = textureHolder.getResource("fightButton" + iconFileName);
+    iconSprite.setTexture(*icon);
+    iconSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                             (float) window->getSize().y / 1080));
+    iconSprite.setPosition(position.x * (float) window->getSize().x / 1920,
+                                    position.y * (float) window->getSize().y / 1080);
 
 }
 
-void AttackButton::draw(sf::RenderTarget &target, sf::RenderStates states) const {target.draw(sprite, states);}
-
-void AttackButton::setStatus(const std::string& status)
+void AttackButton::hoverUpdate(sf::Vector2i mousePosition)
 {
-    TextureHolder& textureHolder = TextureHolder::getInstance();
-    sf::Texture* texture = textureHolder.getResource(fileName + status);
-    sprite.setTexture(*texture);
+    isHovered = iconSprite.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y);
 }
 
-void AttackButton::update(sf::Vector2i mousePosition, bool clicked)
+void AttackButton::func()
 {
-    if (sprite.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y))
-    {
-        if (clicked)
-        {
-            if (!wasClicked)
-            {
-                setStatus("_clicked");
-                wasClicked = true;
-
-                /* Выполняем функцию */
-                std::cout << "clicked" << std::endl;
-            }
-        }
-        else
-        {
-            setStatus("_hovered");
-            wasClicked = false;
-        }
-    }
-    else setStatus("_normal");
+    mob->takeDamage(10);
 }
+
 
 /////////////////////////////////// HPBar ///////////////////////////////////
-HPBar::HPBar(sf::RenderWindow* window,const std::string &fileName, int maxHP, sf::Vector2f position)
+HPBar::HPBar(sf::RenderWindow* window, const std::string &HPFileName, int maxHP, sf::Vector2f position)
     : maxHP(maxHP), window(window)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
@@ -67,8 +65,8 @@ HPBar::HPBar(sf::RenderWindow* window,const std::string &fileName, int maxHP, sf
     frameSprite.setPosition(position.x * (float) window->getSize().x / 1920,
                             position.y * (float) window->getSize().y / 1080);
 
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/HPBar/" + fileName + ".png", fileName);
-    sf::Texture *HPTexture = textureHolder.getResource(fileName);
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/HPBar/" + HPFileName + ".png", HPFileName);
+    sf::Texture *HPTexture = textureHolder.getResource(HPFileName);
     HPSprite.setTexture(*HPTexture);
     HPSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
                                       (float) window->getSize().y / 1080));
@@ -85,4 +83,59 @@ void HPBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
 void HPBar::update(int hp)
 {
     HPSprite.setScale(sf::Vector2f((float) hp / (float) maxHP * (float) window->getSize().x / 1920, (float) window->getSize().y / 1080));
+}
+
+/////////////////////////////////// FightersIconFrame ///////////////////////////////////
+FightersIconFrame::FightersIconFrame(sf::RenderWindow *window, Mob* mob, sf::Vector2f position)
+    : window(window), mob(mob), player(nullptr)
+{
+    TextureHolder& textureHolder = TextureHolder::getInstance();
+
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/FightersIcon/fightersIconFrame.png",
+                               "fightersIconFrame");
+    sf::Texture *frameTexture = textureHolder.getResource("fightersIconFrame");
+    frameSprite.setTexture(*frameTexture);
+    frameSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                      (float) window->getSize().y / 1080));
+    frameSprite.setPosition(position.x * (float) window->getSize().x / 1920,
+                            position.y * (float) window->getSize().y / 1080);
+
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/FightersIcon/" + mob->getName() + "FightersIcon.png",
+                               mob->getName() + "FightersIcon");
+    sf::Texture *icon = textureHolder.getResource(mob->getName() + "FightersIcon");
+    iconSprite.setTexture(*icon);
+    iconSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                     (float) window->getSize().y / 1080));
+    iconSprite.setPosition(position.x * (float) window->getSize().x / 1920,
+                           position.y * (float) window->getSize().y / 1080);
+}
+
+FightersIconFrame::FightersIconFrame(sf::RenderWindow *window, Player* player, sf::Vector2f position)
+        : window(window), mob(nullptr), player(player)
+{
+    TextureHolder& textureHolder = TextureHolder::getInstance();
+
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/FightersIcon/fightersIconFrame.png",
+                               "fightersIconFrame");
+    sf::Texture *frameTexture = textureHolder.getResource("fightersIconFrame");
+    frameSprite.setTexture(*frameTexture);
+    frameSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                      (float) window->getSize().y / 1080));
+    frameSprite.setPosition(position.x * (float) window->getSize().x / 1920,
+                            position.y * (float) window->getSize().y / 1080);
+
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/FightersIcon/playerFightersIcon.png",
+                               "playerFightersIcon");
+    sf::Texture *icon = textureHolder.getResource("playerFightersIcon");
+    iconSprite.setTexture(*icon);
+    iconSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                     (float) window->getSize().y / 1080));
+    iconSprite.setPosition(position.x * (float) window->getSize().x / 1920,
+                           position.y * (float) window->getSize().y / 1080);
+}
+
+void FightersIconFrame::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    target.draw(iconSprite, states);
+    target.draw(frameSprite, states);
 }
