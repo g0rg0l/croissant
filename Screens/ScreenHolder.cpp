@@ -20,47 +20,16 @@ void ScreenHolder::openPauseMenu()
     while (true)
     {
         clock->restart().asSeconds();
-
         sf::Event event = {};
-        bool lock_click = false;
+
         while (window->pollEvent(event))
         {
-            for(auto& button : allPauseButtons)
-            {
-                button.update(sf::Mouse::getPosition(*window));
-            }
-
-            switch (event.type)
-            {
-                case sf::Event::MouseButtonPressed:
-                    if (event.mouseButton.button == sf::Mouse::Left && !lock_click)
-                    {
-                        for(auto& button : allPauseButtons)
-                        {
-                            button.update(sf::Mouse::getPosition(*window), true);
-                        }
-                        lock_click = true;
-                    }
-                    break;
-
-                case sf::Event::MouseButtonReleased:
-                    if (event.mouseButton.button == sf::Mouse::Left)
-                    {
-                        lock_click = false;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) return;
         }
 
         window->clear();
         window->draw(backgroundSprite);
         for (auto& element : allPauseMenuElements) window->draw(element);
-        for(auto& button : allPauseButtons) window->draw(button);
 
         sf::Text pauseText;
         sf::Font pauseTextFont;
@@ -81,12 +50,6 @@ void ScreenHolder::loadPauseMenuElements()
     pauseBackground.setFillColor(sf::Color::Red);
     pauseBackground.setPosition((float) window->getSize().x / 4, (float) window->getSize().y / 8);
     allPauseMenuElements.push_back(pauseBackground);
-
-    GUI::Button button1("button");
-    allPauseButtons.push_back(button1);
-
-    GUI::Button button2("button", sf::Vector2f(100, 0));
-    allPauseButtons.push_back(button2);
 }
 
 void ScreenHolder::openFightMenu(Player* player, Mob* mob, std::vector<Mob*>& allMobs, int mobIndex)
@@ -94,38 +57,25 @@ void ScreenHolder::openFightMenu(Player* player, Mob* mob, std::vector<Mob*>& al
     Blur backgroundBlur(background->getSize(), 2);
     sf::Sprite backgroundSprite(backgroundBlur.apply(background->getTexture()));
 
+    loadHpBars(player, mob);
+
     bool keyWasPressed = false;
+    bool clicking;
     while (true)
     {
         clock->restart().asSeconds();
 
         sf::Event event = {};
-        bool lock_click = false;
         while (window->pollEvent(event))
         {
-            for(auto& button : allFightMenuButtons)
-            {
-                button.update(sf::Mouse::getPosition(*window));
-            }
-
             switch (event.type)
             {
                 case sf::Event::MouseButtonPressed:
-                    if (event.mouseButton.button == sf::Mouse::Left && !lock_click)
-                    {
-                        for(auto& button : allFightMenuButtons)
-                        {
-                            button.update(sf::Mouse::getPosition(*window), true);
-                        }
-                        lock_click = true;
-                    }
+                    clicking = true;
                     break;
 
                 case sf::Event::MouseButtonReleased:
-                    if (event.mouseButton.button == sf::Mouse::Left)
-                    {
-                        lock_click = false;
-                    }
+                    clicking = false;
                     break;
 
                 default:
@@ -141,6 +91,7 @@ void ScreenHolder::openFightMenu(Player* player, Mob* mob, std::vector<Mob*>& al
                     if (mob->getHp() <= 0)
                     {
                         allMobs.erase(allMobs.begin() + mobIndex);
+                        allHPBars.clear();
                         return;
                     }
 
@@ -148,25 +99,53 @@ void ScreenHolder::openFightMenu(Player* player, Mob* mob, std::vector<Mob*>& al
                 }
             }
             else keyWasPressed = false;
+
+            for(auto& button : allFightMenuButtons)
+            {
+                button.update(sf::Mouse::getPosition(*window), clicking);
+            }
+            allHPBars[0].update(mob->getHp());
+            allHPBars[1].update(player->getHp());
         }
 
         window->clear();
         window->draw(backgroundSprite);
-        for (auto& element : allFightMenuElements) window->draw(element);
+        window->draw(fightBackground);
         for (auto& button : allFightMenuButtons) window->draw(button);
+        for (auto& bar : allHPBars) window->draw(bar);
         window->display();
     }
 }
 
 void ScreenHolder::loadFightMenuElements()
 {
-    sf::RectangleShape fightBackground(sf::Vector2f((float) background->getSize().x * 1/2, (float) background->getSize().y * 1/2));
-    fightBackground.setFillColor(sf::Color::Blue);
-    fightBackground.setPosition((float) window->getSize().x * 1/4, (float) window->getSize().y * 1/4);
-    allFightMenuElements.push_back(fightBackground);
 
-    GUI::Button button("button");
+    TextureHolder& textureHolder = TextureHolder::getInstance();
+
+    /* Задний фон */
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/Background/fightBackground.png", "fightBackground");
+    sf::Texture *texture = textureHolder.getResource("fightBackground");
+    fightBackground.setTexture(*texture);
+    fightBackground.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                                 (float) window->getSize().y / 1080));
+    fightBackground.setPosition(sf::Vector2f(706 * (float) window->getSize().x / 1920,
+                                             292 * (float) window->getSize().y / 1080));
+
+    /* Иконки сражающихся */
+
+
+    /* Кнопки */
+    FIGHT_GUI::AttackButton button(window, "button");
     allFightMenuButtons.push_back(button);
+}
+
+void ScreenHolder::loadHpBars(Player* player, Mob* mob)
+{
+    FIGHT_GUI::HPBar enemyBar(window, "HPEnemyBarHP", mob->getHp(), sf::Vector2f(778, 517));
+    allHPBars.push_back(enemyBar);
+
+    FIGHT_GUI::HPBar playerBar(window, "HPPlayerBarHP", player->getHp(), sf::Vector2f(982, 517));
+    allHPBars.push_back(playerBar);
 }
 
 

@@ -6,6 +6,7 @@
 #include <iostream>
 #include "dynamic_blur.hpp"
 
+#include "../Resources/ResourceHolder.h"
 #include "../Entity/Player/Player.h"
 #include "../Entity/Mob/Mob.h"
 #include "../GUI/GUI.h"
@@ -26,13 +27,16 @@ public:
 private:
     /* Меню паузы */
     std::vector<sf::RectangleShape> allPauseMenuElements;
-    std::vector<GUI::Button> allPauseButtons;
     void loadPauseMenuElements();
 
     /* Меню боя */
-    std::vector<sf::RectangleShape> allFightMenuElements;
-    std::vector<GUI::Button> allFightMenuButtons;
+    std::vector<FIGHT_GUI::AttackButton> allFightMenuButtons;
+    std::vector<FIGHT_GUI::HPBar> allHPBars;
+    void loadHpBars(Player* player, Mob* mob);
     void loadFightMenuElements();
+
+    /* тест интерфейса */
+    sf::Sprite fightBackground;
 
 private:
     /* Указатели для работы с внешним окном из цикла отображения второстепенных окон */
