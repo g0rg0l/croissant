@@ -4,6 +4,7 @@
 #include "SFML/Graphics.hpp"
 
 #include "../../Resources/ResourceHolder.h"
+#include "Inventory/Inventory.h"
 
 class Player : public sf::Transformable, public  sf::Drawable
 {
@@ -26,19 +27,24 @@ public:
 
     /////////////////////////////////// Бой ///////////////////////////////////
     int getHp() const {return hp;}
+    int getMaxHp() const {return maxHp;}
 
     void takeDamage(int damage) { hp -= damage;}
 
 private:
-    /* Спрайт */
+    /* Отрисовка */
     sf::Sprite sprite;
 
-    /* Скорость */
-    sf::Vector2f velocity; // Вектор перемещения
-    float speed; // Скорость перемещения
+    /* Перемещение */
+    sf::Vector2f velocity;
+    float speed;
 
-    /* Бой */
+private: // Бой
     int hp = 100;
+    int maxHp = 100;
+
+public:
+    Inventory inventory;
 
 };
 

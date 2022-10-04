@@ -12,6 +12,8 @@ Player::Player(float SPEED)
 
     speed = SPEED;
     sprite.setPosition(sf::Vector2f(64, 64));
+
+    inventory = Inventory();
 }
 
 /////////////////////////////////// Отрисовка ///////////////////////////////////

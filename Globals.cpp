@@ -7,7 +7,7 @@ void Globals::updateAllMobs(ScreenHolder& screenHolder)
     {
         if (mob->isSeePlayer(player, map.wallBounds))
         {
-            screenHolder.openFightMenu(&player, mob, allMobs, i);
+            screenHolder.fightScreen.open(&player, mob, allMobs, i);
 
             break; // Как только нашли первого моба, с которым начинается бой, остальных не проверяем.
         }

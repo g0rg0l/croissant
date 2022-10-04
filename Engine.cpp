@@ -39,14 +39,9 @@ void Engine::checkEvents() // Метод, проверяющий все собы
     {
         if (event.type == sf::Event::KeyPressed)
         {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-            {
-                window.close();
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-            {
-                screenHolder.openPauseMenu();
-            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) screenHolder.pauseScreen.open();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) screenHolder.inventoryScreen.open(&globals.player);
         }
     }
 }
