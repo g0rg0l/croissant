@@ -18,14 +18,14 @@ public:
 public:
     std::unordered_map<int, Item*> hotBar = {{4, nullptr},
                                              {5, nullptr},
-                                             {6, new Armor("basic boots", 10, 100)},
+                                             {6, new Armor("boots", "basic boots", 10, 100)},
                                              {7, nullptr}};
 
     std::unordered_map<int, Item*> inv = {{8, nullptr},
                                           {9, nullptr},
                                           {10, nullptr},
                                           {11, nullptr},
-                                          {12, new Armor("basic helmet", 10, 100)},
+                                          {12, new Armor("helmet", "basic helmet", 10, 100)},
                                           {13, nullptr},
                                           {14, nullptr},
                                           {15, nullptr},
@@ -35,34 +35,84 @@ public:
                                           {19, nullptr},
                                           {20, nullptr},
                                           {21, nullptr},
-                                          {22, new Armor("basic leggings", 10, 100)}};
+                                          {22, new Armor("leggings", "basic leggings", 10, 100)}};
 
-    std::unordered_map<int, Item*> equipment = {{0, new Armor("basic helmet", 10, 100)},
-                                                {1, new Armor("basic chest plate", 10, 100)},
-                                                {2, new Armor("basic leggings", 10, 100)},
-                                                {3, new Armor("basic boots", 10, 100)}};
+    std::unordered_map<int, Item*> equipment = {{0, new Armor("helmet", "basic helmet", 10, 100)},
+                                                {1, new Armor("chest plate", "basic chest plate", 10, 100)},
+                                                {2, new Armor("leggings", "basic leggings", 10, 100)},
+                                                {3, new Armor("boots", "basic boots", 10, 100)}};
 
 public:
-    void swap(int fromIndex, int toIndex)
+    Item* takeItem(int index)
     {
-        if (fromIndex <= 3)
+        Item* temp;
+
+        if (index <= 3)
         {
-            if (toIndex <= 3) std::swap(equipment[fromIndex], equipment[toIndex]);
-            else if (toIndex <= 7) std::swap(equipment[fromIndex], hotBar[toIndex]);
-            else std::swap(equipment[fromIndex], inv[toIndex]);
+            temp = equipment[index];
+            equipment[index] = nullptr;
         }
-        else if (fromIndex <= 7)
+        else if (index <= 7)
         {
-            if (toIndex <= 3) std::swap(hotBar[fromIndex], equipment[toIndex]);
-            else if (toIndex <= 7) std::swap(hotBar[fromIndex], hotBar[toIndex]);
-            else std::swap(hotBar[fromIndex], inv[toIndex]);
+            temp = hotBar[index];
+            hotBar[index] = nullptr;
         }
         else
         {
-            if (toIndex <= 3) std::swap(inv[fromIndex], equipment[toIndex]);
-            else if (toIndex <= 7) std::swap(inv[fromIndex], hotBar[toIndex]);
-            else std::swap(inv[fromIndex], inv[toIndex]);
+            temp = inv[index];
+            inv[index] = nullptr;
         }
+
+        return temp;
+    }
+
+    void putItem(Item* item, int index)
+    {
+        if (index <= 3)
+        {
+            equipment[index] = item;
+        }
+        else if (index <= 7)
+        {
+            hotBar[index] = item;
+        }
+        else
+        {
+            inv[index] = item;
+        }
+    }
+
+    bool canWePut(Item* item, int index)
+    {
+        if (item->getSpecification() == "helmet")
+        {
+            return (index >= 4 && index <= 22) || index == 0;
+        }
+        if (item->getSpecification() == "chest plate")
+        {
+            return (index >= 4 && index <= 22) || index == 1;
+        }
+        if (item->getSpecification() == "leggings")
+        {
+            return (index >= 4 && index <= 22) || index == 2;
+        }
+        if (item->getSpecification() == "boots")
+        {
+            return (index >= 4 && index <= 22) || index == 3;
+        }
+
+        std::cout << "no such item specification as " << item->getSpecification() << std::endl;
+        return false;
+    }
+
+    bool isEmpty(int index)
+    {
+        if (index >= 0 && index <= 3) return equipment[index] == nullptr;
+        if (index >= 4 && index <= 7) return hotBar[index] == nullptr;
+        if (index >= 8 && index <= 22) return inv[index] == nullptr;
+
+        std::cout << "no such inventory id as " << index << std::endl;
+        return false;
     }
 
 };

@@ -21,19 +21,22 @@ public:
 
 public:
     void update();
-
-    bool isSwapping = false;
+    void moveItemSprite();
 
 public:
-    void switchOf();
     bool needToReloadVisualElements = false;
 
 private:
-    int fromIndex;
-    int toIndex;
+    bool buttonWasClicked = false;
+    bool itemTaken = false;
+
+private:
+    Item* item = nullptr;
+    Item* tempItem = nullptr;
+
     sf::Sprite fromSprite;
 
-    Inventory* inventory;
+    Inventory* inventory = nullptr;
 
 private:
     std::vector<INVENTORY_GUI::InventoryIcon> allInventoryIcons;
