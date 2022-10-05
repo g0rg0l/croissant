@@ -7,9 +7,11 @@ void SwapHolder::loadIcons(Inventory* inventory,
 
 {
     this->inventory = inventory;
-    this->allInventoryIcons = std::move(allInventoryIcons);
-    this->allHotBarIcons = std::move(allHotBarIcons);
-    this->allEquipmentIcons = std::move(allEquipmentIcons);
+
+    icons.clear();
+    for (auto& icon : allEquipmentIcons) icons.push_back(&icon);
+    for (auto& icon : allHotBarIcons) icons.push_back(&icon);
+    for (auto& icon : allInventoryIcons) icons.push_back(&icon);
 }
 
 void SwapHolder::update()
@@ -22,118 +24,36 @@ void SwapHolder::update()
     {
         if (!buttonWasClicked)
         {
-            /* Три цикла, проверяющие, попали ли мы в какую-либо ячейку */
-            int index_ = 0;
-            for (int i = 8; i <= 22; ++i, index_++)
+            for (int i = 0; i < icons.size(); ++i)
             {
-                if (allInventoryIcons[index_].getSprite().getGlobalBounds().contains(mousePosition.x,mousePosition.y))
+                if (icons[i]->getSprite().getGlobalBounds().contains(mousePosition.x,mousePosition.y))
                 {
                     /* Если мы берём предмет */
                     if (!itemTaken)
                     {
                         /* Если в ячейке есть предмет */
-                        if (allInventoryIcons[index_].getItem())
+                        if (icons[i]->getItem())
                         {
-                            fromSprite = allInventoryIcons[index_].getItemSprite();
+                            fromSprite = icons[i]->getItemSprite();
                             itemTaken = true;
                             item = inventory->takeItem(i);
+                            remItemIndex = i;
                             needToReloadVisualElements = true;
                         }
                     }
                     else // Если мы кладём предмет
                     {
-                        /* Нужно проверить, можемли мы положить предмет в тек. ячейку */
-                        if (inventory->canWePut(item, i))
+                        /* Нужно проверить, можем ли мы положить предмет в тек. ячейку */
+                        if (inventory->correctSpecification(item, i))
                         {
                             /* Если в ячейке есть предмет */
-                            if (allInventoryIcons[index_].getItem())
+                            if (icons[i]->getItem())
                             {
                                 tempItem = inventory->takeItem(i);
                                 inventory->putItem(item, i);
-                                fromSprite = allInventoryIcons[index_].getItemSprite();
+                                fromSprite = icons[i]->getItemSprite();
                                 item = tempItem;
-                                needToReloadVisualElements = true;
-                            }
-                            else // Если ячейка пустая
-                            {
-                                itemTaken = false;
-                                inventory->putItem(item, i);
-                                needToReloadVisualElements = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            index_ = 0;
-            for (int i = 4; i <= 7; ++i, index_++)
-            {
-                if (allHotBarIcons[index_].getSprite().getGlobalBounds().contains(mousePosition.x, mousePosition.y))
-                {
-                    /* Если мы берём предмет */
-                    if (!itemTaken)
-                    {
-                        /* Если в ячейке есть предмет */
-                        if (allHotBarIcons[index_].getItem())
-                        {
-                            fromSprite = allHotBarIcons[index_].getItemSprite();
-                            itemTaken = true;
-                            item = inventory->takeItem(i);
-                            needToReloadVisualElements = true;
-                        }
-                    }
-                    else // Если мы кладём предмет
-                    {
-                        if (inventory->canWePut(item, i))
-                        {
-                            /* Если в ячейке есть предмет */
-                            if (allHotBarIcons[index_].getItem())
-                            {
-                                tempItem = inventory->takeItem(i);
-                                inventory->putItem(item, i);
-                                fromSprite = allHotBarIcons[index_].getItemSprite();
-                                item = tempItem;
-                                needToReloadVisualElements = true;
-                            }
-                            else // Если ячейка пустая
-                            {
-                                itemTaken = false;
-                                inventory->putItem(item, i);
-                                needToReloadVisualElements = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            index_ = 0;
-            for (int i = 0; i <= 3; ++i, index_++)
-            {
-                if (allEquipmentIcons[index_].getSprite().getGlobalBounds().contains(mousePosition.x,mousePosition.y))
-                {
-                    /* Если мы берём предмет */
-                    if (!itemTaken)
-                    {
-                        /* Если в ячейке есть предмет */
-                        if (allEquipmentIcons[index_].getItem())
-                        {
-                            fromSprite = allEquipmentIcons[index_].getItemSprite();
-                            itemTaken = true;
-                            item = inventory->takeItem(i);
-                            needToReloadVisualElements = true;
-                        }
-                    }
-                    else // Если мы кладём предмет
-                    {
-                        if (inventory->canWePut(item, i))
-                        {
-                            /* Если в ячейке есть предмет */
-                            if (allEquipmentIcons[index_].getItem())
-                            {
-                                tempItem = inventory->takeItem(i);
-                                inventory->putItem(item, i);
-                                fromSprite = allEquipmentIcons[index_].getItemSprite();
-                                item = tempItem;
+                                remItemIndex = i;
                                 needToReloadVisualElements = true;
                             }
                             else // Если ячейка пустая
@@ -154,6 +74,16 @@ void SwapHolder::update()
 
 }
 
+void SwapHolder::breakSwap()
+{
+    if (itemTaken)
+    {
+        itemTaken = false;
+        if (inventory->isIconEmpty(remItemIndex)) inventory->putItem(item, remItemIndex);
+        else inventory->putItem(item, inventory->findEmpty(item));
+    }
+}
+
 void SwapHolder::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     if (itemTaken) target.draw(fromSprite, states);
@@ -171,4 +101,3 @@ void SwapHolder::moveItemSprite()
                 );
     }
 }
-

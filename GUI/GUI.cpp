@@ -86,6 +86,7 @@ void HPBar::update(int hp)
     HPSprite.setScale(sf::Vector2f((float) hp / (float) maxHP * (float) window->getSize().x / 1920, (float) window->getSize().y / 1080));
 }
 
+
 /////////////////////////////////// FighterIcon ///////////////////////////////////
 FighterIcon::FighterIcon(sf::RenderWindow *window, Mob* mob, sf::Vector2f position)
     : window(window), mob(mob), player(nullptr)
@@ -141,9 +142,10 @@ void FighterIcon::draw(sf::RenderTarget &target, sf::RenderStates states) const
     target.draw(frameSprite, states);
 }
 
+
 /////////////////////////////////// EquipmentIcon ///////////////////////////////////
 INVENTORY_GUI::EquipmentIcon::EquipmentIcon(sf::RenderWindow *window, Item *item, sf::Vector2f position)
-    : window(window), item(item)
+    : UniversalIcon(window, item)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
 
@@ -178,6 +180,7 @@ void INVENTORY_GUI::EquipmentIcon::draw(sf::RenderTarget &target, sf::RenderStat
     target.draw(backgroundSprite, states);
     if (item) target.draw(itemSprite, states);
 }
+
 
 /////////////////////////////////// PlayerIcon ///////////////////////////////////
 INVENTORY_GUI::PlayerIcon::PlayerIcon(sf::RenderWindow *window, Player *player, sf::Vector2f position)
@@ -214,9 +217,10 @@ void INVENTORY_GUI::PlayerIcon::draw(sf::RenderTarget &target, sf::RenderStates 
     target.draw(playerIconSprite, states);
 }
 
+
 /////////////////////////////////// HotBarIcon ///////////////////////////////////
 INVENTORY_GUI::HotBarIcon::HotBarIcon(sf::RenderWindow *window, Item *item, sf::Vector2f position)
-    : window(window), item(item)
+    : UniversalIcon(window, item)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
 
@@ -254,9 +258,10 @@ void INVENTORY_GUI::HotBarIcon::draw(sf::RenderTarget &target, sf::RenderStates 
     if (item) target.draw(itemSprite, states);
 }
 
+
 /////////////////////////////////// InventoryIcon ///////////////////////////////////
 InventoryIcon::InventoryIcon(sf::RenderWindow *window, Item *item, sf::Vector2f position)
-        : window(window), item(item)
+        : UniversalIcon(window, item)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
 

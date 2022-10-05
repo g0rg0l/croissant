@@ -16,73 +16,51 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 public:
-    std::unordered_map<int, Item*> hotBar = {{4, nullptr},
-                                             {5, nullptr},
-                                             {6, new Armor("boots", "basic boots", 10, 100)},
-                                             {7, nullptr}};
+    std::unordered_map<int, Item*> inv = {
+            {0, new Armor("helmet", "basic helmet", 10, 100)},
+            {1, new Armor("chest plate", "basic chest plate", 10, 100)},
+            {2, new Armor("leggings", "basic leggings", 10, 100)},
+            {3, new Armor("boots", "basic boots", 10, 100)},
 
-    std::unordered_map<int, Item*> inv = {{8, nullptr},
-                                          {9, nullptr},
-                                          {10, nullptr},
-                                          {11, nullptr},
-                                          {12, new Armor("helmet", "basic helmet", 10, 100)},
-                                          {13, nullptr},
-                                          {14, nullptr},
-                                          {15, nullptr},
-                                          {16, nullptr},
-                                          {17, nullptr},
-                                          {18, nullptr},
-                                          {19, nullptr},
-                                          {20, nullptr},
-                                          {21, nullptr},
-                                          {22, new Armor("leggings", "basic leggings", 10, 100)}};
+            {4, nullptr},
+            {5, nullptr},
+            {6, new Armor("boots", "basic boots", 10, 100)},
+            {7, new Armor("helmet", "simple helmet", 15, 200)},
 
-    std::unordered_map<int, Item*> equipment = {{0, new Armor("helmet", "basic helmet", 10, 100)},
-                                                {1, new Armor("chest plate", "basic chest plate", 10, 100)},
-                                                {2, new Armor("leggings", "basic leggings", 10, 100)},
-                                                {3, new Armor("boots", "basic boots", 10, 100)}};
+            {8, nullptr},
+            {9, nullptr},
+            {10, nullptr},
+            {11, nullptr},
+            {12, new Armor("helmet", "basic helmet", 10, 100)},
+            {13, nullptr},
+            {14, nullptr},
+            {15, nullptr},
+            {16, nullptr},
+            {17, nullptr},
+            {18, nullptr},
+            {19, nullptr},
+            {20, nullptr},
+            {21, nullptr},
+            {22, new Armor("leggings", "basic leggings", 10, 100)}
+    };
 
 public:
     Item* takeItem(int index)
     {
         Item* temp;
 
-        if (index <= 3)
-        {
-            temp = equipment[index];
-            equipment[index] = nullptr;
-        }
-        else if (index <= 7)
-        {
-            temp = hotBar[index];
-            hotBar[index] = nullptr;
-        }
-        else
-        {
-            temp = inv[index];
-            inv[index] = nullptr;
-        }
+        temp = inv[index];
+        inv[index] = nullptr;
 
         return temp;
     }
 
     void putItem(Item* item, int index)
     {
-        if (index <= 3)
-        {
-            equipment[index] = item;
-        }
-        else if (index <= 7)
-        {
-            hotBar[index] = item;
-        }
-        else
-        {
-            inv[index] = item;
-        }
+        inv[index] = item;
     }
 
-    bool canWePut(Item* item, int index)
+    bool correctSpecification(Item* item, int index)
     {
         if (item->getSpecification() == "helmet")
         {
@@ -105,14 +83,22 @@ public:
         return false;
     }
 
-    bool isEmpty(int index)
+    bool isIconEmpty(int index)
     {
-        if (index >= 0 && index <= 3) return equipment[index] == nullptr;
-        if (index >= 4 && index <= 7) return hotBar[index] == nullptr;
-        if (index >= 8 && index <= 22) return inv[index] == nullptr;
+        return inv[index] == nullptr;
+    }
 
-        std::cout << "no such inventory id as " << index << std::endl;
-        return false;
+    int findEmpty(Item* item)
+    {
+        for (int i = 0; inv.size(); ++i)
+        {
+            if (!inv[i] && correctSpecification(item, i))
+            {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
 };

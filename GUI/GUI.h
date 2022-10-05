@@ -11,9 +11,32 @@
 #include "../Entity/Mob/Mob.h"
 #include "../Resources/ResourceHolder.h"
 
+class UniversalIcon
+{
+public:
+    UniversalIcon(sf::RenderWindow* window, Item* item)
+        : window(window), item(item) { }
+
+public:
+    sf::Sprite getSprite() const {return backgroundSprite;}
+    Item* getItem() const {return item;}
+    sf::Sprite getItemSprite() const {return itemSprite;}
+
+protected:
+    sf::Sprite backgroundSprite;
+    sf::Sprite itemSprite;
+
+protected:
+    Item* item;
+
+protected:
+    sf::RenderWindow* window;
+};
+
 /////////////////////////////////// Объекты, реализуемые интерфейсом FIGHT_GUI ///////////////////////////////////
 namespace FIGHT_GUI {class AttackButton; class HPBar; class FighterIcon;}
 namespace INVENTORY_GUI {class EquipmentIcon; class PlayerIcon; class HotBarIcon; class InventoryIcon;}
+
 
 /////////////////////////////////// Объявление объектов в FIGHT_GUI ///////////////////////////////////
 class FIGHT_GUI::AttackButton : public sf::Drawable
@@ -44,6 +67,7 @@ private:
     Mob* mob;
 };
 
+
 class FIGHT_GUI::HPBar : public sf::Drawable
 {
 public:
@@ -61,6 +85,7 @@ private:
 private:
     sf::RenderWindow* window;
 };
+
 
 class FIGHT_GUI::FighterIcon : public sf::Drawable
 {
@@ -82,29 +107,15 @@ private:
 };
 
 
-class INVENTORY_GUI::EquipmentIcon : public sf::Drawable
+/////////////////////////////////// Объявление объектов в INVENTORY_GUI ///////////////////////////////////
+class INVENTORY_GUI::EquipmentIcon : public sf::Drawable, public UniversalIcon
 {
 public:
     EquipmentIcon(sf::RenderWindow* window, Item* item,  sf::Vector2f position = {0, 0});
-
 public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-public:
-    sf::Sprite getSprite() const {return backgroundSprite;}
-    Item* getItem() const {return item;}
-    sf::Sprite getItemSprite() const {return itemSprite;}
-
-private:
-    sf::Sprite backgroundSprite;
-    sf::Sprite itemSprite;
-
-private:
-    Item* item;
-
-private:
-    sf::RenderWindow* window;
 };
+
 
 class INVENTORY_GUI::PlayerIcon : public sf::Drawable
 {
@@ -125,52 +136,22 @@ private:
     sf::RenderWindow* window;
 };
 
-class INVENTORY_GUI::HotBarIcon : public sf::Drawable
+
+class INVENTORY_GUI::HotBarIcon : public sf::Drawable, public UniversalIcon
 {
 public:
     HotBarIcon(sf::RenderWindow* window, Item* item, sf::Vector2f position = {0, 0});
-
 public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-public:
-    sf::Sprite getSprite() const {return backgroundSprite;}
-    Item* getItem() const {return item;}
-    sf::Sprite getItemSprite() const {return itemSprite;}
-
-private:
-    sf::Sprite backgroundSprite;
-    sf::Sprite itemSprite;
-
-private:
-    Item* item;
-
-private:
-    sf::RenderWindow* window;
 };
 
-class INVENTORY_GUI::InventoryIcon : public sf::Drawable
+
+class INVENTORY_GUI::InventoryIcon : public sf::Drawable, public UniversalIcon
 {
 public:
     InventoryIcon(sf::RenderWindow* window, Item* item, sf::Vector2f position = {0, 0});
-
 public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-public:
-    sf::Sprite getSprite() const {return backgroundSprite;}
-    Item* getItem() const {return item;}
-    sf::Sprite getItemSprite() const {return itemSprite;}
-
-private:
-    sf::Sprite backgroundSprite;
-    sf::Sprite itemSprite;
-
-private:
-    Item* item;
-
-private:
-    sf::RenderWindow* window;
 };
 
 #endif //ENEMY1_H_GUI_H

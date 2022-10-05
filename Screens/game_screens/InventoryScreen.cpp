@@ -17,10 +17,13 @@ void InventoryScreen::open(Player* player)
 
         while (window->pollEvent(event))
         {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) return;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                swapHolder.breakSwap();
+                return;
+            }
         }
 
-        /* Отлавливаем любое нажатие мыши и проверям, нужно ли запускать SwapHolder */
         swapHolder.update();
         if (swapHolder.needToReloadVisualElements)
         {
@@ -64,10 +67,10 @@ void InventoryScreen::loadVisualElements(Player* player)
                                              276 * (float) window->getSize().y / 1080));
 
     /* Иконки снаряжения */
-    INVENTORY_GUI::EquipmentIcon helmetIcon(window, player->inventory.equipment[0], sf::Vector2f(742, 334));
-    INVENTORY_GUI::EquipmentIcon leggingsIcon(window, player->inventory.equipment[1], sf::Vector2f(896, 334));
-    INVENTORY_GUI::EquipmentIcon chestPlateIcon(window, player->inventory.equipment[2], sf::Vector2f(742, 403));
-    INVENTORY_GUI::EquipmentIcon bootsIcon(window, player->inventory.equipment[3], sf::Vector2f(896, 403));
+    INVENTORY_GUI::EquipmentIcon helmetIcon(window, player->inventory.inv[0], sf::Vector2f(742, 334));
+    INVENTORY_GUI::EquipmentIcon leggingsIcon(window, player->inventory.inv[1], sf::Vector2f(896, 334));
+    INVENTORY_GUI::EquipmentIcon chestPlateIcon(window, player->inventory.inv[2], sf::Vector2f(742, 403));
+    INVENTORY_GUI::EquipmentIcon bootsIcon(window, player->inventory.inv[3], sf::Vector2f(896, 403));
     allEquipmentIcons.push_back(helmetIcon);
     allEquipmentIcons.push_back(leggingsIcon);
     allEquipmentIcons.push_back(chestPlateIcon);
@@ -82,10 +85,10 @@ void InventoryScreen::loadVisualElements(Player* player)
     allPlayerBars.push_back(playerBar);
 
     /* Хот бар */
-    INVENTORY_GUI::HotBarIcon hotBarIcon1(window, player->inventory.hotBar[4], sf::Vector2f(742, 699));
-    INVENTORY_GUI::HotBarIcon hotBarIcon2(window, player->inventory.hotBar[5], sf::Vector2f(869, 699));
-    INVENTORY_GUI::HotBarIcon hotBarIcon3(window, player->inventory.hotBar[6], sf::Vector2f(996, 699));
-    INVENTORY_GUI::HotBarIcon hotBarIcon4(window, player->inventory.hotBar[7], sf::Vector2f(1123, 699));
+    INVENTORY_GUI::HotBarIcon hotBarIcon1(window, player->inventory.inv[4], sf::Vector2f(742, 699));
+    INVENTORY_GUI::HotBarIcon hotBarIcon2(window, player->inventory.inv[5], sf::Vector2f(869, 699));
+    INVENTORY_GUI::HotBarIcon hotBarIcon3(window, player->inventory.inv[6], sf::Vector2f(996, 699));
+    INVENTORY_GUI::HotBarIcon hotBarIcon4(window, player->inventory.inv[7], sf::Vector2f(1123, 699));
     allHotBarIcons.push_back(hotBarIcon1);
     allHotBarIcons.push_back(hotBarIcon2);
     allHotBarIcons.push_back(hotBarIcon3);
