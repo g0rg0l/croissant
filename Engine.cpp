@@ -19,7 +19,7 @@ void Engine::runEngine() // Метод, запускающий игру
 {
 //    globals.map.buildMap(); // Загрузка первого уровня
 
-    globals.map.loadMap(1);
+    globals.map.loadMap(1, &window);
 
     while (window.isOpen())
     {

@@ -6,9 +6,10 @@ TileMap::TileMap()
     textureHolder.loadFromFile("../Levels/images/map_level_1.png", "map_level_1");
 }
 
-void TileMap::loadMap(int level)
+void TileMap::loadMap(int level, sf::RenderWindow* window)
 {
     this->level = level;
+    this->window = window;
 
     loadLevelIds("level_" + std::to_string(level));
     loadVertexArray("level_" + std::to_string(level));
@@ -20,6 +21,7 @@ void TileMap::loadLevelIds(const std::string &level)
     map.clear();
     wallIds.clear();
     textureCoordinates.clear();
+    wallBounds.clear();
 
     /* Загрузка id всех тайлов карты */
     std::ifstream mapFile("../Levels/maps/" + level + ".tmx");
@@ -103,10 +105,10 @@ void TileMap::loadVertexArray(const std::string &level)
             /* Координаты тек. вертекса */
             sf::Vertex* quad = &vertexArray[(i + j * mapSizes.x) * 4];
 
-            quad[0].position = sf::Vector2f(i * tileSizes.x, j * tileSizes.y);
-            quad[1].position = sf::Vector2f( (i + 1) * tileSizes.x, j * tileSizes.y);
-            quad[2].position = sf::Vector2f((i + 1) * tileSizes.x, (j + 1) * tileSizes.y);
-            quad[3].position = sf::Vector2f(i * tileSizes.x, (j + 1) * tileSizes.y);
+            quad[0].position = sf::Vector2f(i * tileSizes.x * window->getSize().x / 1920, j * tileSizes.y * window->getSize().y / 1080);
+            quad[1].position = sf::Vector2f( (i + 1) * tileSizes.x * window->getSize().x / 1920, j * tileSizes.y * window->getSize().y / 1080);
+            quad[2].position = sf::Vector2f((i + 1) * tileSizes.x * window->getSize().x / 1920, (j + 1) * tileSizes.y * window->getSize().y / 1080);
+            quad[3].position = sf::Vector2f(i * tileSizes.x * window->getSize().x / 1920, (j + 1) * tileSizes.y * window->getSize().y / 1080);
 
             /* Текстурные координаты */
             sf::Vector2i texLeftTop = textureCoordinates[id];
@@ -119,7 +121,12 @@ void TileMap::loadVertexArray(const std::string &level)
             /* Заполнение вектора Bounds'ов всех стен на карте */
             if (std::find(std::begin(wallIds), std::end(wallIds), id) != std::end(wallIds))
             {
-                wallBounds.push_back(sf::FloatRect(quad[0].position.x, quad[0].position.y, tileSizes.x, tileSizes.y));
+                wallBounds.push_back(sf::FloatRect(
+                        quad[0].position.x,
+                        quad[0].position.y,
+                        tileSizes.x * window->getSize().x / 1920,
+                        tileSizes.y * window->getSize().y / 1080)
+                );
             }
         }
     }

@@ -19,13 +19,15 @@ public:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
 public:
-    void loadMap(int level);
+    void loadMap(int level, sf::RenderWindow* window);
     void loadLevelIds(const std::string& level);
     void loadVertexArray(const std::string& level);
 
     int level = 1;
 
 private:
+    sf::RenderWindow* window;
+
     sf::VertexArray vertexArray; // Отрисовываемый объект
     std::vector<int> wallIds; // Вектор id всех стен на карте
     std::vector<int> map; // Вектор id всех тайлов карты
