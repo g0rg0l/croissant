@@ -17,7 +17,9 @@ Engine::Engine() // Конструктор, инициализирующий э�
 /////////////////////////////////// Main loop ///////////////////////////////////
 void Engine::runEngine() // Метод, запускающий игру
 {
-    globals.map.buildMap(); // Загрузка первого уровня
+//    globals.map.buildMap(); // Загрузка первого уровня
+
+    globals.map.loadMap(1);
 
     while (window.isOpen())
     {
@@ -51,7 +53,7 @@ void Engine::draw() // Метод, вызывающий отрисовку вс�
 {
     /* Отрисовка объектов на рендер-текстуру */
     renderTexture.setView(view);
-    renderTexture.clear(sf::Color(169, 169, 169));
+    renderTexture.clear(sf::Color(38, 31, 51));
 
     renderTexture.draw(globals.map);
     for (auto &mob : globals.allMobs) renderTexture.draw(*mob);

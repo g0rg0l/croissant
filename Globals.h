@@ -24,14 +24,14 @@ public:
     /////////////////////////////////// Мобы //////////////////////////////////
     std::vector<Mob*> allMobs = {
             new Enemy1(sf::Vector2f(50, 260), "mob1", "mob1"),
-            new Enemy2(sf::Vector2f(250, 250), "mob2", "mob2"),
-            new Enemy2(sf::Vector2f(250, 50), "mob2", "mob2")
+            new Enemy2(sf::Vector2f(275, 250), "mob2", "mob2"),
+            new Enemy2(sf::Vector2f(250, 150), "mob2", "mob2")
     };
 
     void updateAllMobs(ScreenHolder& screenHolder);
 
     /////////////////////////////////// Карта ///////////////////////////////////
-    TileMap map = TileMap(1);
+    TileMap map;
 
 
 private:

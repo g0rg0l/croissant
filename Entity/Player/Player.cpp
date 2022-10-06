@@ -11,7 +11,7 @@ Player::Player(float SPEED)
     sprite.setTexture(*texture);
 
     speed = SPEED;
-    sprite.setPosition(sf::Vector2f(64, 64));
+    sprite.setPosition(sf::Vector2f(128, 128));
 
     inventory = Inventory();
 }
