@@ -34,7 +34,7 @@ public:
             {11, nullptr},
             {12, new Armor("helmet", "basic helmet", 10, 100)},
             {13, nullptr},
-            {14, nullptr},
+            {14, new Weapon("basic axe", 15, 100)},
             {15, nullptr},
             {16, nullptr},
             {17, nullptr},

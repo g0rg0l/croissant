@@ -27,7 +27,7 @@ private:
     sf::Clock* clock;
 
 private:
-    std::vector<FIGHT_GUI::AttackButton> allFightMenuButtons;
+    std::vector<UniversalButton*> allButtons;
     std::vector<FIGHT_GUI::HPBar> allHPBars;
     std::vector<FIGHT_GUI::FighterIcon> allFightersIcons;
 

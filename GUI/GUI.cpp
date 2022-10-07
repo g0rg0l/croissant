@@ -3,23 +3,14 @@
 using namespace FIGHT_GUI;
 using namespace INVENTORY_GUI;
 
-/////////////////////////////////// AttackButton ///////////////////////////////////
-void AttackButton::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    if (isHovered) target.draw(backgroundSpriteHovered, states);
-    else target.draw(backgroundSpriteNormal, states);
-
-    target.draw(itemSprite, states);
-}
-
-AttackButton::AttackButton(sf::RenderWindow *window, Player *player, Mob* mob, Item* item, sf::Vector2f position)
-    : window(window), player(player), mob(mob), item(item)
+FIGHT_GUI::WeaponButton::WeaponButton(sf::RenderWindow *window, Player *player, Mob *mob, Item *item, sf::Vector2f position)
+    : UniversalButton(window, item), player(player), mob(mob)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
 
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/background_normal.png",
-                               "fight_background_normal");
-    sf::Texture *backgroundNormalTexture = textureHolder.getResource("fight_background_normal");
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/WeaponButton/background_normal.png",
+                               "fight_weaponButton_background_normal");
+    sf::Texture *backgroundNormalTexture = textureHolder.getResource("fight_weaponButton_background_normal");
     backgroundSpriteNormal.setTexture(*backgroundNormalTexture);
     backgroundSpriteNormal.setScale(sf::Vector2f((float) window->getSize().x / 1920,
                                            (float) window->getSize().y / 1080));
@@ -27,9 +18,9 @@ AttackButton::AttackButton(sf::RenderWindow *window, Player *player, Mob* mob, I
                                  position.y * (float) window->getSize().y / 1080);
 
 
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/background_hovered.png",
-                               "fight_background_hovered");
-    sf::Texture *backgroundHoveredTexture = textureHolder.getResource("fight_background_hovered");
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/WeaponButton/background_hovered.png",
+                               "fight_weaponButton_background_hovered");
+    sf::Texture *backgroundHoveredTexture = textureHolder.getResource("fight_weaponButton_background_hovered");
     backgroundSpriteHovered.setTexture(*backgroundHoveredTexture);
     backgroundSpriteHovered.setScale(sf::Vector2f((float) window->getSize().x / 1920,
                                                  (float) window->getSize().y / 1080));
@@ -53,20 +44,51 @@ AttackButton::AttackButton(sf::RenderWindow *window, Player *player, Mob* mob, I
 
         itemSprite.setPosition(centeredItemPosition);
     }
-
 }
 
-void AttackButton::hoverUpdate(sf::Vector2i mousePosition)
+
+FIGHT_GUI::HotBarButton::HotBarButton(sf::RenderWindow *window, Player *player, Mob *mob, Item *item, sf::Vector2f position)
+    : UniversalButton(window, item), player(player), mob(mob)
 {
-    isHovered = isHovered ? backgroundSpriteHovered.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y)
-            : backgroundSpriteNormal.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y);
-}
+    TextureHolder& textureHolder = TextureHolder::getInstance();
 
-void AttackButton::func()
-{
-    mob->takeDamage(10);
-}
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/HotBarButton/background_normal.png",
+                               "fight_hotBarButton_background_normal");
+    sf::Texture *backgroundNormalTexture = textureHolder.getResource("fight_hotBarButton_background_normal");
+    backgroundSpriteNormal.setTexture(*backgroundNormalTexture);
+    backgroundSpriteNormal.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                                 (float) window->getSize().y / 1080));
+    backgroundSpriteNormal.setPosition(position.x * (float) window->getSize().x / 1920,
+                                       position.y * (float) window->getSize().y / 1080);
 
+
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/HotBarButton/background_hovered.png",
+                               "fight_hotBarButton_background_hovered");
+    sf::Texture *backgroundHoveredTexture = textureHolder.getResource("fight_hotBarButton_background_hovered");
+    backgroundSpriteHovered.setTexture(*backgroundHoveredTexture);
+    backgroundSpriteHovered.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                                  (float) window->getSize().y / 1080));
+    backgroundSpriteHovered.setPosition(position.x * (float) window->getSize().x / 1920,
+                                        position.y * (float) window->getSize().y / 1080);
+
+    if (item)
+    {
+        textureHolder.loadFromFile("../Items/icons/" + item->getName() + ".png",
+                                   item->getName());
+        sf::Texture *itemTexture = textureHolder.getResource(item->getName());
+        itemSprite.setTexture(*itemTexture);
+
+        itemSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                         (float) window->getSize().y / 1080));
+
+        sf::Vector2f centeredItemPosition = {
+                backgroundSpriteNormal.getGlobalBounds().left + (backgroundSpriteNormal.getGlobalBounds().width - itemSprite.getGlobalBounds().width) / 2,
+                backgroundSpriteNormal.getGlobalBounds().top + (backgroundSpriteNormal.getGlobalBounds().height - itemSprite.getGlobalBounds().height) / 2
+        };
+
+        itemSprite.setPosition(centeredItemPosition);
+    }
+}
 
 /////////////////////////////////// HPBar ///////////////////////////////////
 HPBar::HPBar(sf::RenderWindow* window, const std::string &HPFileName, int maxHP, sf::Vector2f position)

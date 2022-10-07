@@ -33,42 +33,137 @@ protected:
     sf::RenderWindow* window;
 };
 
-/////////////////////////////////// Объекты, реализуемые интерфейсом FIGHT_GUI ///////////////////////////////////
-namespace FIGHT_GUI {class AttackButton; class HPBar; class FighterIcon;}
-namespace INVENTORY_GUI {class EquipmentIcon; class PlayerIcon; class HotBarIcon; class InventoryIcon; class WeaponIcon;}
 
-
-/////////////////////////////////// Объявление объектов в FIGHT_GUI ///////////////////////////////////
-class FIGHT_GUI::AttackButton : public sf::Drawable
+class UniversalButton : public sf::Drawable
 {
 public:
-    AttackButton(sf::RenderWindow* window, Player* player, Mob* mob, Item* item, sf::Vector2f position);
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    void hoverUpdate(sf::Vector2i mousePosition);
+    UniversalButton(sf::RenderWindow* window, Item* item)
+        : window(window), item(item) { }
 
-public:
-    void func();
 
-public:
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        if (isHovered) target.draw(backgroundSpriteHovered, states);
+        else target.draw(backgroundSpriteNormal, states);
+
+        if (item) target.draw(itemSprite, states);
+    }
+
+protected:
     bool isHovered = false;
     bool isLocked = false;
 
-    void unlock() {isLocked = false;}
-    void lock() {isLocked = true;}
+    void updateHovering()
+    {
+        sf::Vector2i mousePosition = sf::Mouse::getPosition();
 
-private:
+        isHovered = isHovered ? backgroundSpriteHovered.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y)
+                              : backgroundSpriteNormal.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y);
+    }
+    void updateClick()
+    {
+
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            if (isHovered && !isLocked)
+            {
+                func();
+
+                isLocked = true;
+            }
+        }
+        else isLocked = false;
+    }
+
+protected:
+    virtual void func() = 0;
+
+public:
+    void update()
+    {
+        updateHovering();
+        updateClick();
+    }
+
+public:
     sf::Sprite backgroundSpriteNormal;
     sf::Sprite backgroundSpriteHovered;
     sf::Sprite itemSprite;
 
-private:
+protected:
     sf::RenderWindow* window;
-    Player* player;
-    Mob* mob;
-
-private:
     Item* item;
 };
+
+/////////////////////////////////// Объекты, реализуемые интерфейсом FIGHT_GUI ///////////////////////////////////
+namespace FIGHT_GUI {class WeaponButton; class HotBarButton; class HPBar; class FighterIcon;}
+namespace INVENTORY_GUI {class EquipmentIcon; class PlayerIcon; class HotBarIcon; class InventoryIcon; class WeaponIcon;}
+
+class FIGHT_GUI::WeaponButton : public UniversalButton
+{
+public:
+    WeaponButton(sf::RenderWindow* window, Player* player, Mob* mob, Item* item, sf::Vector2f position = {0, 0});
+
+private:
+    void func() override
+    {
+        mob->takeDamage(10);
+    }
+
+private:
+    Player* player;
+    Mob* mob;
+};
+
+
+class FIGHT_GUI::HotBarButton : public UniversalButton
+{
+public:
+    HotBarButton(sf::RenderWindow* window, Player* player, Mob* mob, Item* item, sf::Vector2f position = {0, 0});
+
+private:
+    void func() override
+    {
+        std::cout << "Used item from hotBar." << std::endl;
+    }
+
+private:
+    Player* player;
+    Mob* mob;
+};
+
+
+///////////////////////////////////// Объявление объектов в FIGHT_GUI ///////////////////////////////////
+//class FIGHT_GUI::WeaponButton : public sf::Drawable
+//{
+//public:
+//    WeaponButton(sf::RenderWindow* window, Player* player, Mob* mob, Item* item, sf::Vector2f position);
+//    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+//    void hoverUpdate(sf::Vector2i mousePosition);
+//
+//public:
+//    void func();
+//
+//public:
+//    bool isHovered = false;
+//    bool isLocked = false;
+//
+//    void unlock() {isLocked = false;}
+//    void lock() {isLocked = true;}
+//
+//private:
+//    sf::Sprite backgroundSpriteNormal;
+//    sf::Sprite backgroundSpriteHovered;
+//    sf::Sprite itemSprite;
+//
+//private:
+//    sf::RenderWindow* window;
+//    Player* player;
+//    Mob* mob;
+//
+//private:
+//    Item* item;
+//};
 
 
 class FIGHT_GUI::HPBar : public sf::Drawable

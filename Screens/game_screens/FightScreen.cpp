@@ -14,52 +14,22 @@ void FightScreen::open(Player *player, Mob *mob, std::vector<Mob *> &allMobs, in
         allHPBars[0].update(mob->getHp());
         allHPBars[1].update(player->getHp());
 
-        for (auto& button : allFightMenuButtons) button.hoverUpdate(sf::Mouse::getPosition());
+        for (auto& button : allButtons) button->update();
 
         sf::Event event = {};
-        while (window->pollEvent(event))
+        while (window->pollEvent(event)) {}
+
+        if (mob->getHp() <= 0)
         {
-            switch (event.type)
-            {
-                case sf::Event::MouseButtonPressed:
-                    for (auto& button : allFightMenuButtons)
-                    {
-                        if (button.isHovered && !button.isLocked)
-                        {
-                            /* Выполняем команду кнопки */
-                            button.func();
+            allMobs.erase(allMobs.begin() + mobIndex);
 
-                            /* Проверяем, не умер ли моб */
-                            if (mob->getHp() <= 0)
-                            {
-                                allMobs.erase(allMobs.begin() + mobIndex);
-                                return;
-                            }
-
-                            /* Блокируем кнопку, на которую только что нажали */
-                            button.lock();
-
-                            /* Атака моба */
-                            player->takeDamage(10);
-
-                            break;
-                        }
-                    }
-                    break;
-
-                case sf::Event::MouseButtonReleased:
-                    for (auto& button : allFightMenuButtons) button.unlock();
-                    break;
-
-                default:
-                    break;
-            }
+            return;
         }
 
         window->clear();
         window->draw(backgroundSprite);
         window->draw(fightBackground);
-        for (auto& button : allFightMenuButtons) window->draw(button);
+        for (auto& button : allButtons) window->draw(*button);
         for (auto& bar : allHPBars) window->draw(bar);
         for (auto& icon : allFightersIcons) window->draw(icon);
         window->display();
@@ -68,8 +38,8 @@ void FightScreen::open(Player *player, Mob *mob, std::vector<Mob *> &allMobs, in
 
 void FightScreen::loadVisualElements(Player *player, Mob *mob)
 {
+    allButtons.clear();
     allHPBars.clear();
-    allFightMenuButtons.clear();
     allFightersIcons.clear();
 
     TextureHolder& textureHolder = TextureHolder::getInstance();
@@ -80,29 +50,30 @@ void FightScreen::loadVisualElements(Player *player, Mob *mob)
     fightBackground.setTexture(*texture);
     fightBackground.setScale(sf::Vector2f((float) window->getSize().x / 1920,
                                           (float) window->getSize().y / 1080));
-    fightBackground.setPosition(sf::Vector2f(706 * (float) window->getSize().x / 1920,
-                                             292 * (float) window->getSize().y / 1080));
+    fightBackground.setPosition(sf::Vector2f(544 * (float) window->getSize().x / 1920,
+                                             220 * (float) window->getSize().y / 1080));
 
     /* Бары здоровья */
-    FIGHT_GUI::HPBar enemyBar(window, "HPEnemyBarHP", mob->getHp(), sf::Vector2f(778, 517));
+    FIGHT_GUI::HPBar enemyBar(window, "HPEnemyBarHP", mob->getHp(), sf::Vector2f(704, 411));
     allHPBars.push_back(enemyBar);
 
-    FIGHT_GUI::HPBar playerBar(window, "HPPlayerBarHP", player->getMaxHp(), sf::Vector2f(982, 517));
+    FIGHT_GUI::HPBar playerBar(window, "HPPlayerBarHP", player->getMaxHp(), sf::Vector2f(1008, 411));
     allHPBars.push_back(playerBar);
 
     /* Кнопки */
-    FIGHT_GUI::AttackButton button1(window, player, mob, player->inventory.inv[4], sf::Vector2f(778, 660));
-    FIGHT_GUI::AttackButton button2(window, player, mob, player->inventory.inv[5], sf::Vector2f(874, 660));
-    FIGHT_GUI::AttackButton button3(window, player, mob, player->inventory.inv[6], sf::Vector2f(982, 660));
-    FIGHT_GUI::AttackButton button4(window, player, mob, player->inventory.inv[7], sf::Vector2f(1078, 660));
-    allFightMenuButtons.push_back(button1);
-    allFightMenuButtons.push_back(button2);
-    allFightMenuButtons.push_back(button3);
-    allFightMenuButtons.push_back(button4);
+    auto weaponButton = new FIGHT_GUI::WeaponButton(window, player, mob, player->inventory.inv[4], sf::Vector2f(952, 523));
+    auto hotBarButton1 = new FIGHT_GUI::HotBarButton(window, player, mob, player->inventory.inv[5], sf::Vector2f(1024, 523));
+    auto hotBarButton2 = new FIGHT_GUI::HotBarButton(window, player, mob, player->inventory.inv[6], sf::Vector2f(1096, 523));
+    auto hotBarButton3 = new FIGHT_GUI::HotBarButton(window, player, mob, player->inventory.inv[7], sf::Vector2f(1168, 523));
+    allButtons.push_back(weaponButton);
+    allButtons.push_back(hotBarButton1);
+    allButtons.push_back(hotBarButton2);
+    allButtons.push_back(hotBarButton3);
+
 
     /* Иконки сражающихся */
-    FIGHT_GUI::FighterIcon icon1(window, mob, sf::Vector2f(814, 400));
-    FIGHT_GUI::FighterIcon icon2(window, player, sf::Vector2f(1018, 400));
+    FIGHT_GUI::FighterIcon icon1(window, mob, sf::Vector2f(740, 291));
+    FIGHT_GUI::FighterIcon icon2(window, player, sf::Vector2f(1044, 291));
     allFightersIcons.push_back(icon1);
     allFightersIcons.push_back(icon2);
 }
