@@ -19,14 +19,16 @@ public:
             {2, new Armor("leggings", "basic leggings", 10, 100)},
             {3, new Armor("boots", "basic boots", 10, 100)},
 
-            /* Хот бар */
+            /* Оружейная ячейка */
             {4, nullptr},
+
+            /* Хот бар */
             {5, nullptr},
             {6, new Armor("boots", "basic boots", 10, 100)},
             {7, new Armor("helmet", "simple helmet", 15, 200)},
 
             /* Ячейки */
-            {8, nullptr},
+            {8, new Weapon("basic sword", 10, 100)},
             {9, nullptr},
             {10, nullptr},
             {11, nullptr},

@@ -18,19 +18,24 @@ bool Inventory::correctSpecification(Item* item, int index)
 {
     if (item->getSpecification() == "helmet")
     {
-        return (index >= 4 && index <= 22) || index == 0;
+        return (index >= 5 && index <= 22) || index == 0;
     }
     if (item->getSpecification() == "chest plate")
     {
-        return (index >= 4 && index <= 22) || index == 1;
+        return (index >= 5 && index <= 22) || index == 1;
     }
     if (item->getSpecification() == "leggings")
     {
-        return (index >= 4 && index <= 22) || index == 2;
+        return (index >= 5 && index <= 22) || index == 2;
     }
     if (item->getSpecification() == "boots")
     {
-        return (index >= 4 && index <= 22) || index == 3;
+        return (index >= 5 && index <= 22) || index == 3;
+    }
+
+    if (item->getSpecification() == "weapon")
+    {
+        return (index >= 8 && index <= 22) || index == 4;
     }
 
     std::cout << "no such item specification as " << item->getSpecification() << std::endl;

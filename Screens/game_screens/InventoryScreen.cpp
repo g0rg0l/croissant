@@ -6,7 +6,7 @@ void InventoryScreen::open(Player* player)
     sf::Sprite backgroundSprite(backgroundBlur.apply(background->getTexture()));
 
     loadVisualElements(player);
-    swapHolder.loadIcons(&player->inventory, allInventoryIcons, allHotBarIcons, allEquipmentIcons);
+    swapHolder.loadIcons(&player->inventory, allInventoryIcons, allHotBarIcons, allWeaponIcons, allEquipmentIcons);
 
     while (true)
     {
@@ -28,7 +28,7 @@ void InventoryScreen::open(Player* player)
         if (swapHolder.needToReloadVisualElements)
         {
             loadVisualElements(player);
-            swapHolder.loadIcons(&player->inventory, allInventoryIcons, allHotBarIcons, allEquipmentIcons);
+            swapHolder.loadIcons(&player->inventory, allInventoryIcons, allHotBarIcons, allWeaponIcons, allEquipmentIcons);
             swapHolder.needToReloadVisualElements = false;
         }
 
@@ -40,6 +40,7 @@ void InventoryScreen::open(Player* player)
         for (auto& icon : allPlayerIcons) window->draw(icon);
         for (auto& bar : allPlayerBars) window->draw(bar);
         for (auto& icon : allHotBarIcons) window->draw(icon);
+        for (auto& icon : allWeaponIcons) window->draw(icon);
         for (auto& icon : allInventoryIcons) window->draw(icon);
         window->draw(swapHolder);
 
@@ -54,6 +55,7 @@ void InventoryScreen::loadVisualElements(Player* player)
     allPlayerBars.clear();
     allHotBarIcons.clear();
     allInventoryIcons.clear();
+    allWeaponIcons.clear();
 
     TextureHolder& textureHolder = TextureHolder::getInstance();
 
@@ -85,14 +87,14 @@ void InventoryScreen::loadVisualElements(Player* player)
     allPlayerBars.push_back(playerBar);
 
     /* Хот бар */
-    INVENTORY_GUI::HotBarIcon hotBarIcon1(window, player->inventory.inv[4], sf::Vector2f(742, 699));
-    INVENTORY_GUI::HotBarIcon hotBarIcon2(window, player->inventory.inv[5], sf::Vector2f(869, 699));
-    INVENTORY_GUI::HotBarIcon hotBarIcon3(window, player->inventory.inv[6], sf::Vector2f(996, 699));
-    INVENTORY_GUI::HotBarIcon hotBarIcon4(window, player->inventory.inv[7], sf::Vector2f(1123, 699));
+    INVENTORY_GUI::WeaponIcon weaponIcon(window, player->inventory.inv[4], sf::Vector2f(742, 699));
+    INVENTORY_GUI::HotBarIcon hotBarIcon1(window, player->inventory.inv[5], sf::Vector2f(869, 699));
+    INVENTORY_GUI::HotBarIcon hotBarIcon2(window, player->inventory.inv[6], sf::Vector2f(996, 699));
+    INVENTORY_GUI::HotBarIcon hotBarIcon3(window, player->inventory.inv[7], sf::Vector2f(1123, 699));
+    allWeaponIcons.push_back(weaponIcon);
     allHotBarIcons.push_back(hotBarIcon1);
     allHotBarIcons.push_back(hotBarIcon2);
     allHotBarIcons.push_back(hotBarIcon3);
-    allHotBarIcons.push_back(hotBarIcon4);
 
     /* Основной инвентарь */
     INVENTORY_GUI::InventoryIcon icon1(window, player->inventory.inv[8], sf::Vector2f(981, 330));

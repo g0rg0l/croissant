@@ -35,14 +35,14 @@ protected:
 
 /////////////////////////////////// Объекты, реализуемые интерфейсом FIGHT_GUI ///////////////////////////////////
 namespace FIGHT_GUI {class AttackButton; class HPBar; class FighterIcon;}
-namespace INVENTORY_GUI {class EquipmentIcon; class PlayerIcon; class HotBarIcon; class InventoryIcon;}
+namespace INVENTORY_GUI {class EquipmentIcon; class PlayerIcon; class HotBarIcon; class InventoryIcon; class WeaponIcon;}
 
 
 /////////////////////////////////// Объявление объектов в FIGHT_GUI ///////////////////////////////////
 class FIGHT_GUI::AttackButton : public sf::Drawable
 {
 public:
-    AttackButton(sf::RenderWindow* window, Player* player, Mob* mob, const std::string& iconFileName, sf::Vector2f position);
+    AttackButton(sf::RenderWindow* window, Player* player, Mob* mob, Item* item, sf::Vector2f position);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void hoverUpdate(sf::Vector2i mousePosition);
 
@@ -57,14 +57,17 @@ public:
     void lock() {isLocked = true;}
 
 private:
-    sf::Sprite frameSprite_normal;
-    sf::Sprite frameSprite_hovered;
-    sf::Sprite iconSprite;
+    sf::Sprite backgroundSpriteNormal;
+    sf::Sprite backgroundSpriteHovered;
+    sf::Sprite itemSprite;
 
 private:
     sf::RenderWindow* window;
     Player* player;
     Mob* mob;
+
+private:
+    Item* item;
 };
 
 
@@ -150,6 +153,14 @@ class INVENTORY_GUI::InventoryIcon : public sf::Drawable, public UniversalIcon
 {
 public:
     InventoryIcon(sf::RenderWindow* window, Item* item, sf::Vector2f position = {0, 0});
+public:
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+};
+
+class INVENTORY_GUI::WeaponIcon : public sf::Drawable, public UniversalIcon
+{
+public:
+    WeaponIcon(sf::RenderWindow* window, Item* item, sf::Vector2f position = {0, 0});
 public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

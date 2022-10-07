@@ -91,10 +91,10 @@ void FightScreen::loadVisualElements(Player *player, Mob *mob)
     allHPBars.push_back(playerBar);
 
     /* Кнопки */
-    FIGHT_GUI::AttackButton button1(window, player, mob, "icon_sword", sf::Vector2f(778, 660));
-    FIGHT_GUI::AttackButton button2(window, player, mob, "icon_axe", sf::Vector2f(874, 660));
-    FIGHT_GUI::AttackButton button3(window, player, mob, "icon_wand", sf::Vector2f(982, 660));
-    FIGHT_GUI::AttackButton button4(window, player, mob, "icon_bow", sf::Vector2f(1078, 660));
+    FIGHT_GUI::AttackButton button1(window, player, mob, player->inventory.inv[4], sf::Vector2f(778, 660));
+    FIGHT_GUI::AttackButton button2(window, player, mob, player->inventory.inv[5], sf::Vector2f(874, 660));
+    FIGHT_GUI::AttackButton button3(window, player, mob, player->inventory.inv[6], sf::Vector2f(982, 660));
+    FIGHT_GUI::AttackButton button4(window, player, mob, player->inventory.inv[7], sf::Vector2f(1078, 660));
     allFightMenuButtons.push_back(button1);
     allFightMenuButtons.push_back(button2);
     allFightMenuButtons.push_back(button3);

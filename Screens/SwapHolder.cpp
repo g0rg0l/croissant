@@ -1,15 +1,17 @@
 #include "SwapHolder.h"
 
 void SwapHolder::loadIcons(Inventory* inventory,
-                           std::vector<INVENTORY_GUI::InventoryIcon> allInventoryIcons,
-                           std::vector<INVENTORY_GUI::HotBarIcon> allHotBarIcons,
-                           std::vector<INVENTORY_GUI::EquipmentIcon> allEquipmentIcons)
+                           std::vector<INVENTORY_GUI::InventoryIcon>& allInventoryIcons,
+                           std::vector<INVENTORY_GUI::HotBarIcon>& allHotBarIcons,
+                           std::vector<INVENTORY_GUI::WeaponIcon>& allWeaponIcons,
+                           std::vector<INVENTORY_GUI::EquipmentIcon>& allEquipmentIcons)
 
 {
     this->inventory = inventory;
 
     icons.clear();
     for (auto& icon : allEquipmentIcons) icons.push_back(&icon);
+    for (auto& icon : allWeaponIcons) icons.push_back(&icon);
     for (auto& icon : allHotBarIcons) icons.push_back(&icon);
     for (auto& icon : allInventoryIcons) icons.push_back(&icon);
 }

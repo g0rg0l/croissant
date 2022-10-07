@@ -33,6 +33,7 @@ private:
     std::vector<FIGHT_GUI::HPBar> allPlayerBars;
     std::vector<INVENTORY_GUI::HotBarIcon> allHotBarIcons;
     std::vector<INVENTORY_GUI::InventoryIcon> allInventoryIcons;
+    std::vector<INVENTORY_GUI::WeaponIcon> allWeaponIcons;
 
 private:
     SwapHolder swapHolder;

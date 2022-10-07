@@ -6,44 +6,60 @@ using namespace INVENTORY_GUI;
 /////////////////////////////////// AttackButton ///////////////////////////////////
 void AttackButton::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    target.draw(iconSprite, states);
-    if (isHovered) target.draw(frameSprite_hovered, states);
-    else target.draw(frameSprite_normal, states);
+    if (isHovered) target.draw(backgroundSpriteHovered, states);
+    else target.draw(backgroundSpriteNormal, states);
+
+    target.draw(itemSprite, states);
 }
 
-AttackButton::AttackButton(sf::RenderWindow *window, Player *player, Mob* mob, const std::string &iconFileName, sf::Vector2f position)
-    : window(window), player(player), mob(mob)
+AttackButton::AttackButton(sf::RenderWindow *window, Player *player, Mob* mob, Item* item, sf::Vector2f position)
+    : window(window), player(player), mob(mob), item(item)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
 
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/frame_normal.png", "fightButtonFrame_normal");
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/frame_hovered.png", "fightButtonFrame_hovered");
-    sf::Texture* frameNormal = textureHolder.getResource("fightButtonFrame_normal");
-    sf::Texture* frameHovered = textureHolder.getResource("fightButtonFrame_hovered");
-    frameSprite_normal.setTexture(*frameNormal);
-    frameSprite_hovered.setTexture(*frameHovered);
-    frameSprite_normal.setScale(sf::Vector2f((float) window->getSize().x / 1920,
-                                      (float) window->getSize().y / 1080));
-    frameSprite_hovered.setScale(sf::Vector2f((float) window->getSize().x / 1920,
-                                      (float) window->getSize().y / 1080));
-    frameSprite_normal.setPosition(position.x * (float) window->getSize().x / 1920,
-                            position.y * (float) window->getSize().y / 1080);
-    frameSprite_hovered.setPosition(position.x * (float) window->getSize().x / 1920,
-                            position.y * (float) window->getSize().y / 1080);
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/background_normal.png",
+                               "fight_background_normal");
+    sf::Texture *backgroundNormalTexture = textureHolder.getResource("fight_background_normal");
+    backgroundSpriteNormal.setTexture(*backgroundNormalTexture);
+    backgroundSpriteNormal.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                           (float) window->getSize().y / 1080));
+    backgroundSpriteNormal.setPosition(position.x * (float) window->getSize().x / 1920,
+                                 position.y * (float) window->getSize().y / 1080);
 
-    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/" + iconFileName + ".png", "fightButton" + iconFileName);
-    sf::Texture* icon = textureHolder.getResource("fightButton" + iconFileName);
-    iconSprite.setTexture(*icon);
-    iconSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
-                                             (float) window->getSize().y / 1080));
-    iconSprite.setPosition(position.x * (float) window->getSize().x / 1920,
-                                    position.y * (float) window->getSize().y / 1080);
+
+    textureHolder.loadFromFile("../GUI/FIGHT_GUI/AttackButton/background_hovered.png",
+                               "fight_background_hovered");
+    sf::Texture *backgroundHoveredTexture = textureHolder.getResource("fight_background_hovered");
+    backgroundSpriteHovered.setTexture(*backgroundHoveredTexture);
+    backgroundSpriteHovered.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                                 (float) window->getSize().y / 1080));
+    backgroundSpriteHovered.setPosition(position.x * (float) window->getSize().x / 1920,
+                                       position.y * (float) window->getSize().y / 1080);
+
+    if (item)
+    {
+        textureHolder.loadFromFile("../Items/icons/" + item->getName() + ".png",
+                                   item->getName());
+        sf::Texture *itemTexture = textureHolder.getResource(item->getName());
+        itemSprite.setTexture(*itemTexture);
+
+        itemSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                         (float) window->getSize().y / 1080));
+
+        sf::Vector2f centeredItemPosition = {
+                backgroundSpriteNormal.getGlobalBounds().left + (backgroundSpriteNormal.getGlobalBounds().width - itemSprite.getGlobalBounds().width) / 2,
+                backgroundSpriteNormal.getGlobalBounds().top + (backgroundSpriteNormal.getGlobalBounds().height - itemSprite.getGlobalBounds().height) / 2
+        };
+
+        itemSprite.setPosition(centeredItemPosition);
+    }
 
 }
 
 void AttackButton::hoverUpdate(sf::Vector2i mousePosition)
 {
-    isHovered = iconSprite.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y);
+    isHovered = isHovered ? backgroundSpriteHovered.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y)
+            : backgroundSpriteNormal.getGlobalBounds().contains((float) mousePosition.x, (float) mousePosition.y);
 }
 
 void AttackButton::func()
@@ -260,7 +276,7 @@ void INVENTORY_GUI::HotBarIcon::draw(sf::RenderTarget &target, sf::RenderStates 
 
 
 /////////////////////////////////// InventoryIcon ///////////////////////////////////
-InventoryIcon::InventoryIcon(sf::RenderWindow *window, Item *item, sf::Vector2f position)
+INVENTORY_GUI::InventoryIcon::InventoryIcon(sf::RenderWindow *window, Item *item, sf::Vector2f position)
         : UniversalIcon(window, item)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
@@ -293,7 +309,47 @@ InventoryIcon::InventoryIcon(sf::RenderWindow *window, Item *item, sf::Vector2f 
     }
 }
 
-void InventoryIcon::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void INVENTORY_GUI::InventoryIcon::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    target.draw(backgroundSprite, states);
+    if (item) target.draw(itemSprite, states);
+}
+
+
+INVENTORY_GUI::WeaponIcon::WeaponIcon(sf::RenderWindow *window, Item *item, sf::Vector2f position)
+        : UniversalIcon(window, item)
+{
+    TextureHolder& textureHolder = TextureHolder::getInstance();
+
+    textureHolder.loadFromFile("../GUI/INVENTORY_GUI/WeaponIcon/inventoryWeaponIcon.png",
+                               "inventoryWeaponIcon");
+    sf::Texture *backgroundTexture = textureHolder.getResource("inventoryWeaponIcon");
+    backgroundSprite.setTexture(*backgroundTexture);
+    backgroundSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                           (float) window->getSize().y / 1080));
+    backgroundSprite.setPosition(position.x * (float) window->getSize().x / 1920,
+                                 position.y * (float) window->getSize().y / 1080);
+
+    if (item)
+    {
+        textureHolder.loadFromFile("../Items/icons/" + item->getName() + ".png",
+                                   item->getName());
+        sf::Texture *itemTexture = textureHolder.getResource(item->getName());
+        itemSprite.setTexture(*itemTexture);
+
+        itemSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                         (float) window->getSize().y / 1080));
+
+        sf::Vector2f centeredItemPosition = {
+                backgroundSprite.getGlobalBounds().left + (backgroundSprite.getGlobalBounds().width - itemSprite.getGlobalBounds().width) / 2,
+                backgroundSprite.getGlobalBounds().top + (backgroundSprite.getGlobalBounds().height - itemSprite.getGlobalBounds().height) / 2
+        };
+
+        itemSprite.setPosition(centeredItemPosition);
+    }
+}
+
+void INVENTORY_GUI::WeaponIcon::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(backgroundSprite, states);
     if (item) target.draw(itemSprite, states);

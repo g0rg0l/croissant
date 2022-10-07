@@ -29,8 +29,8 @@ protected:
 class Weapon : public Item
 {
 public:
-    Weapon(const std::string& specification, const std::string& name, int damage, int durability)
-        : Item(name, durability, specification), damage(damage) {  }
+    Weapon(const std::string& name, int damage, int durability)
+        : Item(name, durability, "weapon"), damage(damage) {  }
 
     ~Weapon() override = default;
 
