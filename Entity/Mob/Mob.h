@@ -12,40 +12,36 @@ class Mob : public  sf::Drawable
 {
 public:
     /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-    explicit Mob(sf::Vector2f position, const std::string &textureHolderKey, const std::string& name);
+    explicit Mob(const std::string& name, sf::Vector2f position, sf::Vector2f sizes, const std::string& textureHolderKey, sf::RenderWindow* window);
 
     /////////////////////////////////// Отрисовка ///////////////////////////////////
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void updateSprite();
 
     /////////////////////////////////// Взаимодействие с игроком ///////////////////////////////////
-    bool isSeePlayer(Player &player, const std::vector<sf::FloatRect> &allWallBounds);
+    bool isSeePlayer(Player* player, const std::vector<sf::FloatRect> &allWallBounds);
 
-    /////////////////////////////////// Бой ///////////////////////////////////
+public:
+    std::string getName() {return name;}
     int getHp() const {return hp;}
+    sf::Vector2f getSizes() {return sizes;}
 
+public:
     void takeDamage(int damage) { hp -= damage;}
 
-    /////////////////////////////////// Информация ///////////////////////////////////
-    std::string getName() {return name;}
-
 protected:
-    /////////////////////////////////// Создание моба ///////////////////////////////////
-    void loadSprite(); // Наложение текстуры на спрайт
-    void loadPosition(); // Выставление положения на карте
-    virtual void setPreferences() = 0; // Загрузка параметров персонажа
+    sf::RenderWindow* window;
 
-protected:
     /* Спрайт */
-    std::string textureHolderKey; // Ключ доступа к текстуре
-    sf::Sprite sprite; // Спрайт
-
-    /* Положение на карте */
-    sf::Vector2f position;
-
-    /* Дальность видимости */
-    int visibilityDistance = 0;
+    std::string textureHolderKey;
+    sf::Sprite sprite;
+    sf::Vector2f sizes;
+    int textureFramesCount;
+    sf::Clock animationClock;
+    float currentSpriteFrame = 0;
 
     /* Бой */
+    int visibilityDistance = 0;
     int hp = 0;
 
     /* Информация */

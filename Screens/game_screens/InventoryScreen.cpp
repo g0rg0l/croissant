@@ -3,10 +3,12 @@
 void InventoryScreen::open(Player* player)
 {
     Blur backgroundBlur(background->getSize(), 2);
-    sf::Sprite backgroundSprite(backgroundBlur.apply(background->getTexture()));
+    backgroundSprite = backgroundBlur.apply(background->getTexture());
 
     loadVisualElements(player);
-    swapHolder.loadIcons(&player->inventory, allInventoryIcons, allHotBarIcons, allWeaponIcons, allEquipmentIcons);
+    manifest();
+
+    swapHolder->loadIcons(&player->inventory, allInventoryIcons, allHotBarIcons, allWeaponIcons, allEquipmentIcons);
 
     while (true)
     {
@@ -17,19 +19,21 @@ void InventoryScreen::open(Player* player)
 
         while (window->pollEvent(event))
         {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::I) || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
-                swapHolder.breakSwap();
+                swapHolder->breakSwap();
+
+                unManifest();
                 return;
             }
         }
 
-        swapHolder.update();
-        if (swapHolder.needToReloadVisualElements)
+        swapHolder->update();
+        if (swapHolder->needToReloadVisualElements)
         {
             loadVisualElements(player);
-            swapHolder.loadIcons(&player->inventory, allInventoryIcons, allHotBarIcons, allWeaponIcons, allEquipmentIcons);
-            swapHolder.needToReloadVisualElements = false;
+            swapHolder->loadIcons(&player->inventory, allInventoryIcons, allHotBarIcons, allWeaponIcons, allEquipmentIcons);
+            swapHolder->needToReloadVisualElements = false;
         }
 
         window->clear();
@@ -42,7 +46,7 @@ void InventoryScreen::open(Player* player)
         for (auto& icon : allHotBarIcons) window->draw(icon);
         for (auto& icon : allWeaponIcons) window->draw(icon);
         for (auto& icon : allInventoryIcons) window->draw(icon);
-        window->draw(swapHolder);
+        window->draw(*swapHolder);
 
         window->display();
     }
@@ -127,4 +131,36 @@ void InventoryScreen::loadVisualElements(Player* player)
     allInventoryIcons.push_back(icon13);
     allInventoryIcons.push_back(icon14);
     allInventoryIcons.push_back(icon15);
+}
+
+void InventoryScreen::manifest()
+{
+    textureForAnimator.draw(backgroundSprite);
+    textureForAnimator.draw(inventoryBackground);
+    for (auto& icon : allEquipmentIcons) textureForAnimator.draw(icon);
+    for (auto& icon : allPlayerIcons) textureForAnimator.draw(icon);
+    for (auto& bar : allPlayerBars) textureForAnimator.draw(bar);
+    for (auto& icon : allHotBarIcons) textureForAnimator.draw(icon);
+    for (auto& icon : allWeaponIcons) textureForAnimator.draw(icon);
+    for (auto& icon : allInventoryIcons) textureForAnimator.draw(icon);
+    textureForAnimator.display();
+
+    Animator& animator = Animator::getInstance();
+    animator.manifest(window, clock, background, &textureForAnimator);
+}
+
+void InventoryScreen::unManifest()
+{
+    textureForAnimator.draw(backgroundSprite);
+    textureForAnimator.draw(inventoryBackground);
+    for (auto& icon : allEquipmentIcons) textureForAnimator.draw(icon);
+    for (auto& icon : allPlayerIcons) textureForAnimator.draw(icon);
+    for (auto& bar : allPlayerBars) textureForAnimator.draw(bar);
+    for (auto& icon : allHotBarIcons) textureForAnimator.draw(icon);
+    for (auto& icon : allWeaponIcons) textureForAnimator.draw(icon);
+    for (auto& icon : allInventoryIcons) textureForAnimator.draw(icon);
+    textureForAnimator.display();
+
+    Animator& animator = Animator::getInstance();
+    animator.unManifest(window, clock, background, &textureForAnimator);
 }

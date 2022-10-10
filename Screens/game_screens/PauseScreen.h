@@ -8,9 +8,9 @@ class PauseScreen
 {
 
 public:
-    explicit PauseScreen(sf::RenderWindow* window = nullptr,
-            sf::RenderTexture* renderTexture = nullptr,
-            sf::Clock* clock = nullptr)
+    explicit PauseScreen(sf::RenderWindow* window,
+            sf::RenderTexture* renderTexture,
+            sf::Clock* clock)
     : window(window), background(renderTexture), clock(clock) { }
 
 public:

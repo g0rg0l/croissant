@@ -5,37 +5,35 @@
 #include <iostream>
 
 #include "Entity/Player/Player.h"
-
 #include "Entity/Mob/Mob.h"
-#include "Entity/Mob/Enemy1.h"
-#include "Entity/Mob/Enemy2.h"
-
+#include "Entity/Mob/nefarious bat/NefariousBat.h"
+#include "Entity/Mob/crimson imp/CrimsonImp.h"
+#include "Entity/Mob/spiked ravager/SpikedRavager.h"
+#include "Entity/Mob/glaring overlord/GlaringOverlord.h"
 #include "Levels/TileMap.h"
-
 #include "Screens/ScreenHolder.h"
 
 class Globals
 {
 
 public:
+    explicit Globals(sf::RenderWindow* window);
+    ~Globals();
+
+public:
     /////////////////////////////////// Игрок ///////////////////////////////////
-    Player player = Player(100.f);
+    Player* player;
 
     /////////////////////////////////// Мобы //////////////////////////////////
-    std::vector<Mob*> allMobs = {
-            new Enemy1(sf::Vector2f(50, 260), "mob1", "mob1"),
-            new Enemy2(sf::Vector2f(275, 250), "mob2", "mob2"),
-            new Enemy2(sf::Vector2f(250, 150), "mob2", "mob2")
-    };
+    std::vector<Mob*> allMobs;
 
-    void updateAllMobs(ScreenHolder& screenHolder);
+    void updateAllMobs(ScreenHolder* screenHolder);
 
     /////////////////////////////////// Карта ///////////////////////////////////
-    TileMap map;
-
+    TileMap* map;
 
 private:
-
+    sf::RenderWindow* window;
 
 };
 

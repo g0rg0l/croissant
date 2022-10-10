@@ -1,25 +1,20 @@
 #include "Mob.h"
 
 /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-Mob::Mob(sf::Vector2f position, const std::string& textureHolderKey, const std::string& name)
-{
-    this->position = position;
-    this->textureHolderKey = textureHolderKey;
-    this->name = name;
-}
-
-void Mob::loadPosition()
-{
-    sprite.setPosition(position);
-}
-
-void Mob::loadSprite()
+Mob::Mob(const std::string&  name, sf::Vector2f position, sf::Vector2f sizes, const std::string& textureHolderKey, sf::RenderWindow* window)
+    : name(name), sizes(sizes), textureHolderKey(textureHolderKey), window(window)
 {
     TextureHolder& textureHolder = TextureHolder::getInstance();
-    textureHolder.loadFromFile("../Entity/Mob/images/" + textureHolderKey + ".png", textureHolderKey);
+    textureHolder.loadFromFile("../Entity/Mob/" + textureHolderKey + "/src/" +
+        textureHolderKey + ".png", textureHolderKey);
 
     sf::Texture *texture = textureHolder.getResource(textureHolderKey);
     sprite.setTexture(*texture);
+    textureFramesCount = (int) (sprite.getGlobalBounds().width / sizes.x);
+    sprite.setTextureRect(sf::IntRect(0, 0, sizes.x, sizes.y));
+    sprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                                  (float) window->getSize().y / 1080));
+    sprite.setPosition(position);
 }
 
 /////////////////////////////////// Отрисовка ///////////////////////////////////
@@ -29,10 +24,11 @@ void Mob::draw(sf::RenderTarget &target, sf::RenderStates states) const
 }
 
 /////////////////////////////////// Взаимодействие с игроком ///////////////////////////////////
-bool Mob::isSeePlayer(Player &player, const std::vector<sf::FloatRect> &allWallBounds)
+bool Mob::isSeePlayer(Player* player, const std::vector<sf::FloatRect> &allWallBounds)
 {
-    sf::FloatRect playerBounds = player.getSprite().getGlobalBounds();
+    sf::FloatRect playerBounds = player->getSprite().getGlobalBounds();
     sf::FloatRect mobBounds = sprite.getGlobalBounds();
+
     sf::Vector2f mobCenterPoint = sf::Vector2f(mobBounds.left + mobBounds.width / 2, mobBounds.top + mobBounds.height / 2);
 
     sf::Vector2f playerPoint1 = {playerBounds.left + playerBounds.width/4, playerBounds.top + playerBounds.height/4};
@@ -82,4 +78,17 @@ bool Mob::isSeePlayer(Player &player, const std::vector<sf::FloatRect> &allWallB
         else return false;
     }
     else return false;
+}
+
+void Mob::updateSprite()
+{
+    float dt = 7.5 * animationClock.restart().asSeconds();
+
+    if ((int) currentSpriteFrame < (int) (currentSpriteFrame + dt))
+    {
+        sprite.setTextureRect(sf::IntRect(((int) currentSpriteFrame) * sizes.x, 0, sizes.x, sizes.y));
+    }
+    currentSpriteFrame += dt;
+
+    if ((int ) currentSpriteFrame > textureFramesCount - 1) currentSpriteFrame = 0;
 }

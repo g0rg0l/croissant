@@ -5,6 +5,8 @@ void PauseScreen::open()
     Blur backgroundBlur(background->getSize(), 2);
     sf::Sprite backgroundSprite(backgroundBlur.apply(background->getTexture()));
 
+    loadVisualElements();
+
     while (true)
     {
         clock->restart().asSeconds();

@@ -9,12 +9,14 @@ class ScreenHolder
 {
 
 public:
-    explicit ScreenHolder(sf::RenderWindow* window = nullptr, sf::RenderTexture* renderTexture = nullptr, sf::Clock* clock = nullptr);
+    explicit ScreenHolder(sf::RenderWindow* window, sf::RenderTexture* renderTexture, sf::Clock* clock);
+
+    ~ScreenHolder();
 
 public:
-    FightScreen fightScreen; // Экран боя
-    PauseScreen pauseScreen; // Экран паузы
-    InventoryScreen inventoryScreen; // Экран инвентаря
+    FightScreen* fightScreen; // Экран боя
+    PauseScreen* pauseScreen; // Экран паузы
+    InventoryScreen* inventoryScreen; // Экран инвентаря
 };
 
 #endif //ENEMY1_H_SCREENHOLDER_H

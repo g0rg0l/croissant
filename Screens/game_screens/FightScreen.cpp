@@ -3,9 +3,10 @@
 void FightScreen::open(Player *player, Mob *mob, std::vector<Mob *> &allMobs, int mobIndex)
 {
     Blur backgroundBlur(background->getSize(), 2);
-    sf::Sprite backgroundSprite(backgroundBlur.apply(background->getTexture()));
+    backgroundSprite = backgroundBlur.apply(background->getTexture());
 
     loadVisualElements(player, mob);
+    manifest();
 
     while (true)
     {
@@ -23,6 +24,7 @@ void FightScreen::open(Player *player, Mob *mob, std::vector<Mob *> &allMobs, in
         {
             allMobs.erase(allMobs.begin() + mobIndex);
 
+            unManifest();
             return;
         }
 
@@ -76,4 +78,30 @@ void FightScreen::loadVisualElements(Player *player, Mob *mob)
     FIGHT_GUI::FighterIcon icon2(window, player, sf::Vector2f(1044, 291));
     allFightersIcons.push_back(icon1);
     allFightersIcons.push_back(icon2);
+}
+
+void FightScreen::manifest()
+{
+    textureForAnimator.draw(backgroundSprite);
+    textureForAnimator.draw(fightBackground);
+    for (auto& button : allButtons) textureForAnimator.draw(*button);
+    for (auto& bar : allHPBars) textureForAnimator.draw(bar);
+    for (auto& icon : allFightersIcons) textureForAnimator.draw(icon);
+    textureForAnimator.display();
+
+    Animator& animator = Animator::getInstance();
+    animator.manifest(window, clock, background, &textureForAnimator);
+}
+
+void FightScreen::unManifest()
+{
+    textureForAnimator.draw(backgroundSprite);
+    textureForAnimator.draw(fightBackground);
+    for (auto& button : allButtons) textureForAnimator.draw(*button);
+    for (auto& bar : allHPBars) textureForAnimator.draw(bar);
+    for (auto& icon : allFightersIcons) textureForAnimator.draw(icon);
+    textureForAnimator.display();
+
+    Animator& animator = Animator::getInstance();
+    animator.unManifest(window, clock, background, &textureForAnimator);
 }

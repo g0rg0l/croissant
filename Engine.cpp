@@ -7,11 +7,21 @@ Engine::Engine() // Конструктор, инициализирующий э�
                   "croissant",
                   sf::Style::Fullscreen
                   );
+    window.setFramerateLimit(0);
 
     view.setSize((float) videoMode.width / viewScale, (float) videoMode.height / viewScale);
 
     renderTexture.create(videoMode.width,videoMode.height);
-    screenHolder = ScreenHolder(&window, &renderTexture, &clock);
+
+    screenHolder = new ScreenHolder(&window, &renderTexture, &clock);
+
+    globals = new Globals(&window);
+}
+
+Engine::~Engine()
+{
+    delete screenHolder;
+    delete globals;
 }
 
 /////////////////////////////////// Main loop ///////////////////////////////////
@@ -19,14 +29,14 @@ void Engine::runEngine() // Метод, запускающий игру
 {
 //    globals.map.buildMap(); // Загрузка первого уровня
 
-    globals.map.loadMap(1, &window);
+    globals->map->loadMap(1, &window);
 
     while (window.isOpen())
     {
         float deltaTime = clock.restart().asSeconds();
 
-        globals.player.move(deltaTime, globals.map.wallBounds, &view);
-        globals.updateAllMobs(screenHolder);
+        globals->player->move(deltaTime, globals->map->wallBounds, &view);
+        globals->updateAllMobs(screenHolder);
         checkEvents();
         draw();
     }
@@ -42,8 +52,8 @@ void Engine::checkEvents() // Метод, проверяющий все собы
         if (event.type == sf::Event::KeyPressed)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) screenHolder.pauseScreen.open();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) screenHolder.inventoryScreen.open(&globals.player);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) screenHolder->pauseScreen->open();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) screenHolder->inventoryScreen->open(globals->player);
         }
     }
 }
@@ -55,9 +65,9 @@ void Engine::draw() // Метод, вызывающий отрисовку вс�
     renderTexture.setView(view);
     renderTexture.clear(sf::Color(38, 31, 51));
 
-    renderTexture.draw(globals.map);
-    for (auto &mob : globals.allMobs) renderTexture.draw(*mob);
-    renderTexture.draw(globals.player);
+    renderTexture.draw(*globals->map);
+    for (auto &mob : globals->allMobs) renderTexture.draw(*mob);
+    renderTexture.draw(*globals->player);
 
     renderTexture.display();
 

@@ -2,7 +2,14 @@
 
 ScreenHolder::ScreenHolder(sf::RenderWindow *window, sf::RenderTexture *renderTexture, sf::Clock *clock)
 {
-    fightScreen = FightScreen(window, renderTexture, clock);
-    pauseScreen = PauseScreen(window, renderTexture, clock);
-    inventoryScreen = InventoryScreen(window, renderTexture, clock);
+    fightScreen = new FightScreen(window, renderTexture, clock);
+    pauseScreen = new PauseScreen(window, renderTexture, clock);
+    inventoryScreen = new InventoryScreen(window, renderTexture, clock);
+}
+
+ScreenHolder::~ScreenHolder()
+{
+    delete fightScreen;
+    delete pauseScreen;
+    delete inventoryScreen;
 }

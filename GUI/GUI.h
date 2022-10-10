@@ -133,39 +133,6 @@ private:
 };
 
 
-///////////////////////////////////// Объявление объектов в FIGHT_GUI ///////////////////////////////////
-//class FIGHT_GUI::WeaponButton : public sf::Drawable
-//{
-//public:
-//    WeaponButton(sf::RenderWindow* window, Player* player, Mob* mob, Item* item, sf::Vector2f position);
-//    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-//    void hoverUpdate(sf::Vector2i mousePosition);
-//
-//public:
-//    void func();
-//
-//public:
-//    bool isHovered = false;
-//    bool isLocked = false;
-//
-//    void unlock() {isLocked = false;}
-//    void lock() {isLocked = true;}
-//
-//private:
-//    sf::Sprite backgroundSpriteNormal;
-//    sf::Sprite backgroundSpriteHovered;
-//    sf::Sprite itemSprite;
-//
-//private:
-//    sf::RenderWindow* window;
-//    Player* player;
-//    Mob* mob;
-//
-//private:
-//    Item* item;
-//};
-
-
 class FIGHT_GUI::HPBar : public sf::Drawable
 {
 public:

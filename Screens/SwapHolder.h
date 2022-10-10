@@ -30,7 +30,7 @@ public:
 
 private:
     bool buttonWasClicked = false;
-    int remItemIndex;
+    int remItemIndex = 0;
     bool itemTaken = false;
 
 private:
