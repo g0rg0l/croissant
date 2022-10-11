@@ -1,9 +1,9 @@
 #ifndef ENEMY1_H_SCREENHOLDER_H
 #define ENEMY1_H_SCREENHOLDER_H
 
-#include "game_screens/FightScreen.h"
-#include "game_screens/PauseScreen.h"
-#include "game_screens/InventoryScreen.h"
+#include "game_screens/fight screen/FightScreen.h"
+#include "game_screens/pause screen/PauseScreen.h"
+#include "game_screens/inventory screen/InventoryScreen.h"
 
 class ScreenHolder
 {

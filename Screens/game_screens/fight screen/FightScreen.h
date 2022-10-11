@@ -2,12 +2,13 @@
 #define ENEMY1_H_FIGHTSCREEN_H
 
 #include "SFML/Graphics.hpp"
-#include "../dynamic_blur.hpp"
+#include "../../dynamic_blur.hpp"
 
-#include "../../Entity/Player/Player.h"
-#include "../../Entity/Mob/Mob.h"
-#include "../../GUI/GUI.h"
-#include "../../Animations/Animator.h"
+#include "../../../Entity/Player/Player.h"
+#include "../../../Entity/Mob/Mob.h"
+#include "../../../GUI/GUI.h"
+#include "../../../Animations/Animator.h"
+#include "FightHolder.h"
 
 class FightScreen
 {
@@ -38,6 +39,12 @@ private:
     std::vector<FIGHT_GUI::HPBar> allHPBars;
     std::vector<FIGHT_GUI::FighterIcon> allFightersIcons;
     sf::Sprite fightBackground;
+
+private:
+    void updateEnemyAttack(Player* player, Mob* mob);
+
+    sf::Clock enemyAttackClock;
+    float enemyAttackTime = 0;
 
 };
 

@@ -7,6 +7,6 @@ GlaringOverlord::GlaringOverlord(const std::string &name,
                            sf::RenderWindow *window)
         : Mob(name, position, sizes, textureHolderKey, window)
 {
-    visibilityDistance = 50;
+    visibilityDistance = 75;
     hp = 200;
 }

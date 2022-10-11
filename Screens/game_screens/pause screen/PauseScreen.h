@@ -2,7 +2,7 @@
 #define ENEMY1_H_PAUSESCREEN_H
 
 #include "SFML/Graphics.hpp"
-#include "../dynamic_blur.hpp"
+#include "../../dynamic_blur.hpp"
 
 class PauseScreen
 {

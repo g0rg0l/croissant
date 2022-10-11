@@ -108,14 +108,15 @@ HPBar::HPBar(sf::RenderWindow* window, const std::string &HPFileName, int maxHP,
     sf::Texture *HPTexture = textureHolder.getResource(HPFileName);
     HPSprite.setTexture(*HPTexture);
 
-    sf::Vector2f centeredHPPosition = {
+    HPSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
+                                   (float) window->getSize().y / 1080));
+
+    sf::Vector2f centeredByXHPPosition = {
             frameSprite.getGlobalBounds().left + (frameSprite.getGlobalBounds().width - HPSprite.getGlobalBounds().width) / 2,
-            frameSprite.getGlobalBounds().top + (frameSprite.getGlobalBounds().height - HPSprite.getGlobalBounds().height) / 2
+            frameSprite.getGlobalBounds().top
     };
 
-    HPSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
-                                      (float) window->getSize().y / 1080));
-    HPSprite.setPosition(centeredHPPosition);
+    HPSprite.setPosition(centeredByXHPPosition);
 }
 
 void HPBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
@@ -140,18 +141,25 @@ FighterIcon::FighterIcon(sf::RenderWindow *window, Mob* mob, sf::Vector2f positi
                                "fightersIconFrame");
     sf::Texture *frameTexture = textureHolder.getResource("fightersIconFrame");
     frameSprite.setTexture(*frameTexture);
-    frameSprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
-                                      (float) window->getSize().y / 1080));
-    frameSprite.setPosition(position.x * (float) window->getSize().x / 1920,
-                            position.y * (float) window->getSize().y / 1080);
+
+    frameSprite.setScale(sf::Vector2f(
+            (float) window->getSize().x / 1920,
+            (float) window->getSize().y / 1080));
+
+    frameSprite.setPosition(
+            position.x * (float) window->getSize().x / 1920,
+            position.y * (float) window->getSize().y / 1080);
 
 
     textureHolder.loadFromFile("../Entity/Mob/" + mob->getName() + "/src/" + mob->getName() + " fighter icon.png",
                                mob->getName() + " fighter icon");
     sf::Texture *icon = textureHolder.getResource(mob->getName() + " fighter icon");
     iconSprite.setTexture(*icon);
-    iconSprite.setScale(sf::Vector2f(frameSprite.getGlobalBounds().width / 1.25 / mob->getSizes().x * (float) window->getSize().x / 1920,
-                                     frameSprite.getGlobalBounds().height / 1.25 / mob->getSizes().y * (float) window->getSize().y / 1080));
+
+    iconSprite.setScale(sf::Vector2f(
+            64 / mob->getSizes().x * (float) window->getSize().x / 1920,
+            64 / mob->getSizes().x * (float) window->getSize().y / 1080
+            ));
 
     sf::Vector2f centeredIconPosition = {
             frameSprite.getGlobalBounds().left + (frameSprite.getGlobalBounds().width - iconSprite.getGlobalBounds().width) / 2,

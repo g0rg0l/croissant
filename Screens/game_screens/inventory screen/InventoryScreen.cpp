@@ -88,6 +88,7 @@ void InventoryScreen::loadVisualElements(Player* player)
 
     /* Бар здоровья игрока */
     FIGHT_GUI::HPBar playerBar(window, "HPPlayerBarHP", player->getMaxHp(), sf::Vector2f(774, 616));
+    playerBar.update(player->getHp());
     allPlayerBars.push_back(playerBar);
 
     /* Хот бар */
@@ -135,6 +136,7 @@ void InventoryScreen::loadVisualElements(Player* player)
 
 void InventoryScreen::manifest()
 {
+    textureForAnimator.clear();
     textureForAnimator.draw(backgroundSprite);
     textureForAnimator.draw(inventoryBackground);
     for (auto& icon : allEquipmentIcons) textureForAnimator.draw(icon);
@@ -151,6 +153,7 @@ void InventoryScreen::manifest()
 
 void InventoryScreen::unManifest()
 {
+    textureForAnimator.clear();
     textureForAnimator.draw(backgroundSprite);
     textureForAnimator.draw(inventoryBackground);
     for (auto& icon : allEquipmentIcons) textureForAnimator.draw(icon);

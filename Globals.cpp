@@ -8,8 +8,9 @@ Globals::Globals(sf::RenderWindow* window)
 
     allMobs = {
         new NefariousBat("nefarious bat", {200, 200}, {16, 16}, "nefarious bat", window),
-        new CrimsonImp("crimson imp", {200, 184}, {16, 16}, "crimson imp", window),
-        new SpikedRavager("spiked ravager", {200, 168}, {16, 16}, "spiked ravager", window),
+//        new CrimsonImp("crimson imp", {200, 184}, {16, 16}, "crimson imp", window),
+//        new CrimsonImp("crimson imp", {216, 184}, {16, 16}, "crimson imp", window),
+//        new SpikedRavager("spiked ravager", {200, 168}, {16, 16}, "spiked ravager", window),
         new GlaringOverlord("glaring overlord", {32, 156}, {32, 32}, "glaring overlord", window)
     };
 }

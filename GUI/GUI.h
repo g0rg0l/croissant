@@ -10,6 +10,7 @@
 #include "../Items/Item.h"
 #include "../Entity/Mob/Mob.h"
 #include "../Resources/ResourceHolder.h"
+#include "../Screens/game_screens/fight screen/FightHolder.h"
 
 class UniversalIcon
 {
@@ -84,6 +85,7 @@ public:
         updateHovering();
         updateClick();
     }
+    void forceHoverShutdown() {isHovered = false;}
 
 public:
     sf::Sprite backgroundSpriteNormal;
@@ -107,7 +109,8 @@ public:
 private:
     void func() override
     {
-        mob->takeDamage(10);
+        FightHolder& fightHolder = FightHolder::getInstance();
+        fightHolder.attackMob(player, mob);
     }
 
 private:

@@ -33,25 +33,25 @@ void Animator::manifest(sf::RenderWindow *window, sf::Clock* clock, sf::RenderTe
     }
 }
 
-void Animator::unManifest(sf::RenderWindow *window, sf::Clock* clock, sf::RenderTexture *background, sf::RenderTexture *textureToManifest)
+void Animator::unManifest(sf::RenderWindow *window, sf::Clock* clock, sf::RenderTexture *background, sf::RenderTexture *textureToUnManifest)
 {
     float alpha = 255;
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(background->getTexture());
 
-    sf::Sprite spriteToManifest;
-    spriteToManifest.setTexture(textureToManifest->getTexture());
+    sf::Sprite spriteToUnManifest;
+    spriteToUnManifest.setTexture(textureToUnManifest->getTexture());
 
     while (alpha >= 0)
     {
         float dt = clock->restart().asSeconds();
-        spriteToManifest.setColor(sf::Color(255, 255, 255, (int) alpha));
+        spriteToUnManifest.setColor(sf::Color(255, 255, 255, (int) alpha));
 
         window->clear();
 
         window->draw(backgroundSprite);
-        window->draw(spriteToManifest);
+        window->draw(spriteToUnManifest);
 
         window->display();
 

@@ -2,13 +2,13 @@
 #define ENEMY1_H_INVENTORYSCREEN_H
 
 #include "SFML/Graphics.hpp"
-#include "../dynamic_blur.hpp"
+#include "../../dynamic_blur.hpp"
 
-#include "../../Resources/ResourceHolder.h"
-#include "../../Animations/Animator.h"
-#include "../../Entity/Player/Player.h"
-#include "../../GUI/GUI.h"
-#include "../SwapHolder.h"
+#include "../../../Resources/ResourceHolder.h"
+#include "../../../Animations/Animator.h"
+#include "../../../Entity/Player/Player.h"
+#include "../../../GUI/GUI.h"
+#include "../../SwapHolder.h"
 
 class InventoryScreen
 {

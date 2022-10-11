@@ -15,14 +15,27 @@ void FightScreen::open(Player *player, Mob *mob, std::vector<Mob *> &allMobs, in
         allHPBars[0].update(mob->getHp());
         allHPBars[1].update(player->getHp());
 
-        for (auto& button : allButtons) button->update();
+        FightHolder& fightHolder = FightHolder::getInstance();
+        if (fightHolder.isPlayerMove)
+        {
+            enemyAttackClock.restart().asSeconds();
+
+            for (auto& button : allButtons) button->update();
+        }
+        else
+        {
+            updateEnemyAttack(player, mob);
+        }
 
         sf::Event event = {};
         while (window->pollEvent(event)) {}
 
         if (mob->getHp() <= 0)
         {
+            fightHolder.isPlayerMove = true;
+
             allMobs.erase(allMobs.begin() + mobIndex);
+            delete mob;
 
             unManifest();
             return;
@@ -35,6 +48,21 @@ void FightScreen::open(Player *player, Mob *mob, std::vector<Mob *> &allMobs, in
         for (auto& bar : allHPBars) window->draw(bar);
         for (auto& icon : allFightersIcons) window->draw(icon);
         window->display();
+    }
+}
+
+void FightScreen::updateEnemyAttack(Player* player, Mob* mob)
+{
+    if (enemyAttackTime == 0) for (auto& button : allButtons) button->forceHoverShutdown();
+
+    enemyAttackTime += enemyAttackClock.restart().asSeconds();
+
+    if (enemyAttackTime >= 1.5)
+    {
+        FightHolder& fightHolder = FightHolder::getInstance();
+        fightHolder.attackPlayer(player, mob);
+
+        enemyAttackTime = 0;
     }
 }
 
@@ -60,6 +88,7 @@ void FightScreen::loadVisualElements(Player *player, Mob *mob)
     allHPBars.push_back(enemyBar);
 
     FIGHT_GUI::HPBar playerBar(window, "HPPlayerBarHP", player->getMaxHp(), sf::Vector2f(1008, 411));
+    playerBar.update(player->getHp());
     allHPBars.push_back(playerBar);
 
     /* Кнопки */
@@ -82,6 +111,7 @@ void FightScreen::loadVisualElements(Player *player, Mob *mob)
 
 void FightScreen::manifest()
 {
+    textureForAnimator.clear();
     textureForAnimator.draw(backgroundSprite);
     textureForAnimator.draw(fightBackground);
     for (auto& button : allButtons) textureForAnimator.draw(*button);
@@ -95,6 +125,7 @@ void FightScreen::manifest()
 
 void FightScreen::unManifest()
 {
+    textureForAnimator.clear();
     textureForAnimator.draw(backgroundSprite);
     textureForAnimator.draw(fightBackground);
     for (auto& button : allButtons) textureForAnimator.draw(*button);

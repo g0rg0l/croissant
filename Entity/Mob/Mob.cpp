@@ -12,9 +12,14 @@ Mob::Mob(const std::string&  name, sf::Vector2f position, sf::Vector2f sizes, co
     sprite.setTexture(*texture);
     textureFramesCount = (int) (sprite.getGlobalBounds().width / sizes.x);
     sprite.setTextureRect(sf::IntRect(0, 0, sizes.x, sizes.y));
-    sprite.setScale(sf::Vector2f((float) window->getSize().x / 1920,
-                                                  (float) window->getSize().y / 1080));
-    sprite.setPosition(position);
+
+    sprite.setScale(sf::Vector2f(
+            (float) window->getSize().x / 1920,
+            (float) window->getSize().y / 1080));
+
+    sprite.setPosition(
+            position.x * (float) window->getSize().x / 1920,
+            position.y * (float) window->getSize().y / 1080);
 }
 
 /////////////////////////////////// Отрисовка ///////////////////////////////////
