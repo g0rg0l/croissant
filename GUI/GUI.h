@@ -110,7 +110,7 @@ private:
     void func() override
     {
         FightHolder& fightHolder = FightHolder::getInstance();
-        fightHolder.attackMob(player, mob);
+        fightHolder.attackMob(player, mob, window);
     }
 
 private:

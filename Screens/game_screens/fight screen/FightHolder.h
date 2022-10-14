@@ -3,6 +3,7 @@
 
 #include "../../../Entity/Mob/Mob.h"
 #include "../../../Entity/Player/Player.h"
+#include "../../../Animations/EffectsHolder.h"
 
 class FightHolder
 {
@@ -17,8 +18,8 @@ public:
      bool isPlayerMove = true;
 
 public:
-    void attackMob(Player* player, Mob* mob);
-    void attackPlayer(Player* player, Mob* mob);
+    void attackMob(Player* player, Mob* mob, sf::Window* window);
+    void attackPlayer(Player* player, Mob* mob, sf::Window* window);
 };
 
 

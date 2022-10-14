@@ -7,6 +7,7 @@
 
 #include "Globals.h"
 #include "Screens/ScreenHolder.h"
+#include "Animations/EffectsHolder.h"
 #include "GUI/GUI.h"
 
 class Engine

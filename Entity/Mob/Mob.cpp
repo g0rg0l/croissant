@@ -1,25 +1,12 @@
 #include "Mob.h"
 
+#include <utility>
+
 /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-Mob::Mob(const std::string&  name, sf::Vector2f position, sf::Vector2f sizes, const std::string& textureHolderKey, sf::RenderWindow* window)
-    : name(name), sizes(sizes), textureHolderKey(textureHolderKey), window(window)
+Mob::Mob(std::string name, sf::Vector2f sizes, sf::RenderWindow* window)
+    : name(std::move(name)), sizes(sizes), window(window)
 {
-    TextureHolder& textureHolder = TextureHolder::getInstance();
-    textureHolder.loadFromFile("../Entity/Mob/" + textureHolderKey + "/src/" +
-        textureHolderKey + ".png", textureHolderKey);
 
-    sf::Texture *texture = textureHolder.getResource(textureHolderKey);
-    sprite.setTexture(*texture);
-    textureFramesCount = (int) (sprite.getGlobalBounds().width / sizes.x);
-    sprite.setTextureRect(sf::IntRect(0, 0, sizes.x, sizes.y));
-
-    sprite.setScale(sf::Vector2f(
-            (float) window->getSize().x / 1920,
-            (float) window->getSize().y / 1080));
-
-    sprite.setPosition(
-            position.x * (float) window->getSize().x / 1920,
-            position.y * (float) window->getSize().y / 1080);
 }
 
 /////////////////////////////////// Отрисовка ///////////////////////////////////

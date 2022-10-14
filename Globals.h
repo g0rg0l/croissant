@@ -6,10 +6,9 @@
 
 #include "Entity/Player/Player.h"
 #include "Entity/Mob/Mob.h"
-#include "Entity/Mob/nefarious bat/NefariousBat.h"
-#include "Entity/Mob/crimson imp/CrimsonImp.h"
-#include "Entity/Mob/spiked ravager/SpikedRavager.h"
-#include "Entity/Mob/glaring overlord/GlaringOverlord.h"
+
+#include "Entity/Mob/vampire bat/VampireBat.h"
+
 #include "Levels/TileMap.h"
 #include "Screens/ScreenHolder.h"
 

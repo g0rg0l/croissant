@@ -22,13 +22,12 @@ Engine::~Engine()
 {
     delete screenHolder;
     delete globals;
+    EffectsHolders::Map::getInstance().clear();
 }
 
 /////////////////////////////////// Main loop ///////////////////////////////////
 void Engine::runEngine() // Метод, запускающий игру
 {
-//    globals.map.buildMap(); // Загрузка первого уровня
-
     globals->map->loadMap(1, &window);
 
     while (window.isOpen())
@@ -37,6 +36,8 @@ void Engine::runEngine() // Метод, запускающий игру
 
         globals->player->move(deltaTime, globals->map->wallBounds, &view);
         globals->updateAllMobs(screenHolder);
+
+        EffectsHolders::Map::getInstance().update();
         checkEvents();
         draw();
     }
@@ -68,6 +69,7 @@ void Engine::draw() // Метод, вызывающий отрисовку вс�
     renderTexture.draw(*globals->map);
     for (auto &mob : globals->allMobs) renderTexture.draw(*mob);
     renderTexture.draw(*globals->player);
+    renderTexture.draw(EffectsHolders::Map::getInstance());
 
     renderTexture.display();
 

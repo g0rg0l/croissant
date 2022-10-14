@@ -7,16 +7,20 @@ FightHolder &FightHolder::getInstance()
     return fightHolder;
 }
 
-void FightHolder::attackMob(Player *player, Mob *mob)
+void FightHolder::attackMob(Player *player, Mob *mob, sf::Window* window)
 {
     mob->takeDamage(10);
+    EffectsHolders::Inventory::getInstance().createEffect("basic attack", {740, 403}, window);
 
     isPlayerMove = false;
 }
 
-void FightHolder::attackPlayer(Player *player, Mob *mob)
+void FightHolder::attackPlayer(Player *player, Mob *mob, sf::Window* window)
 {
-    player->takeDamage(10);
+    int basicDamage = mob->getDamage();
+
+    player->takeDamage(basicDamage);
+    EffectsHolders::Inventory::getInstance().createEffect("basic attack", {1044, 403}, window);
 
     isPlayerMove = true;
 }

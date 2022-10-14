@@ -12,7 +12,7 @@ class Mob : public  sf::Drawable
 {
 public:
     /////////////////////////////////// Конструкторы и деконструкторы ///////////////////////////////////
-    explicit Mob(const std::string& name, sf::Vector2f position, sf::Vector2f sizes, const std::string& textureHolderKey, sf::RenderWindow* window);
+    explicit Mob(std::string name, sf::Vector2f sizes, sf::RenderWindow* window);
 
     /////////////////////////////////// Отрисовка ///////////////////////////////////
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -22,18 +22,19 @@ public:
     bool isSeePlayer(Player* player, const std::vector<sf::FloatRect> &allWallBounds);
 
 public:
-    std::string getName() {return name;}
+    std::string getName() const {return name;}
     int getHp() const {return hp;}
-    sf::Vector2f getSizes() {return sizes;}
+    sf::Vector2f getSizes() const {return sizes;}
+    sf::Vector2f getPosition() const {return {sprite.getGlobalBounds().left, sprite.getGlobalBounds().top};}
 
 public:
-    void takeDamage(int damage) { hp -= damage;}
+    void takeDamage(int dmg) { hp -= dmg;}
+    int getDamage() const {return damage;}
 
 protected:
     sf::RenderWindow* window;
 
     /* Спрайт */
-    std::string textureHolderKey;
     sf::Sprite sprite;
     sf::Vector2f sizes;
     int textureFramesCount;
@@ -43,6 +44,7 @@ protected:
     /* Бой */
     int visibilityDistance = 0;
     int hp = 0;
+    int damage = 0;
 
     /* Информация */
     std::string name;
