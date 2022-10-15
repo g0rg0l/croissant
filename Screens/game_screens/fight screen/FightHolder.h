@@ -20,6 +20,7 @@ public:
 public:
     void attackMob(Player* player, Mob* mob, sf::Window* window);
     void attackPlayer(Player* player, Mob* mob, sf::Window* window);
+
 };
 
 

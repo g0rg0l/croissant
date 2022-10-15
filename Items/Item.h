@@ -3,52 +3,45 @@
 
 #include <iostream>
 #include <vector>
+#include <utility>
 
 class Item
 {
 
 public:
-    Item(const std::string& name, int durability, const std::string& specification)
-        : name(name), durability(durability), specification(specification) {  }
+    Item(std::string  name, std::string  specification, int damage, int protection);
     virtual ~Item() = default;
 
-public:
-    void worsen() {durability--;}
 
 public:
     std::string getName() const {return name;}
     std::string getSpecification() const {return specification;}
+    int getDamage() const {return damage;}
+    int getProtection() const {return protection;}
 
 protected:
     std::string specification;
     std::string name;
-    int durability;
+    int damage;
+    int protection;
 };
 
 
 class Weapon : public Item
 {
 public:
-    Weapon(const std::string& name, int damage, int durability)
-        : Item(name, durability, "weapon"), damage(damage) {  }
-
+    Weapon(const std::string& name, int damage);
     ~Weapon() override = default;
 
-private:
-    int damage;
 };
 
 
 class Armor : public Item
 {
 public:
-    Armor(const std::string& specification, const std::string& name, int protection, int durability)
-        : Item(name, durability, specification), protection(protection) {  }
-
+    Armor(const std::string& specification, const std::string& name, int protection);
     ~Armor() override = default;
 
-private:
-    int protection;
 };
 
 

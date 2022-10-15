@@ -116,9 +116,3 @@ void Player::resetMoveOptions() // Обнуление вектора скоро�
 {
     velocity = sf::Vector2f(0, 0);
 }
-
-/////////////////////////////////// Геттеры ///////////////////////////////////
-sf::Sprite Player::getSprite()
-{
-    return sprite;
-}

@@ -23,13 +23,15 @@ public:
     void checkMove(float dt);
 
     /////////////////////////////////// Геттеры ///////////////////////////////////
-    sf::Sprite getSprite();
+    sf::Sprite getSprite() const {return sprite;}
 
     /////////////////////////////////// Бой ///////////////////////////////////
     int getHp() const {return hp;}
     int getMaxHp() const {return maxHp;}
+    int getProtection() const {return protection;}
+    int getDamage() const {return damage;}
 
-    void takeDamage(int damage) { hp -= damage;}
+    void takeDamage(int dmg) { hp = (hp - dmg >= 0) ? hp - dmg : 0; }
 
 private:
     /* Отрисовка */
@@ -39,9 +41,13 @@ private:
     sf::Vector2f velocity;
     float speed;
 
-private: // Бой
+private:
+    int damage = 5;
+
     int hp = 100;
     int maxHp = 100;
+
+    int protection = 0;
 
 public:
     Inventory inventory;

@@ -6,7 +6,7 @@
 
 #include "../../Resources/ResourceHolder.h"
 #include "../Player/Player.h"
-#include "../geometrical_functions/mobView.h"
+#include "../mathematica/mathematica.h"
 
 class Mob : public  sf::Drawable
 {
@@ -23,13 +23,14 @@ public:
 
 public:
     std::string getName() const {return name;}
+    int getDamage() const {return damage;}
+    double getRangeOfDamageMultiplier() const {return rangeOfDamageMultiplier;}
     int getHp() const {return hp;}
     sf::Vector2f getSizes() const {return sizes;}
     sf::Vector2f getPosition() const {return {sprite.getGlobalBounds().left, sprite.getGlobalBounds().top};}
 
 public:
-    void takeDamage(int dmg) { hp -= dmg;}
-    int getDamage() const {return damage;}
+    void takeDamage(int dmg) {hp = (hp - dmg >= 0) ? hp - dmg : 0;}
 
 protected:
     sf::RenderWindow* window;
@@ -42,9 +43,11 @@ protected:
     float currentSpriteFrame = 0;
 
     /* Бой */
-    int visibilityDistance = 0;
-    int hp = 0;
-    int damage = 0;
+    int visibilityDistance;
+
+    int hp;
+    int damage;
+    double rangeOfDamageMultiplier;
 
     /* Информация */
     std::string name;

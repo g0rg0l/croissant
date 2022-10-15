@@ -3,18 +3,18 @@
 /////////////////////////////////// Window ///////////////////////////////////
 Engine::Engine() // Конструктор, инициализирующий экран с параметрами и камеру
 {
+    srand(time(nullptr));
+
     window.create(videoMode,
                   "croissant",
                   sf::Style::Fullscreen
                   );
-    window.setFramerateLimit(0);
 
     view.setSize((float) videoMode.width / viewScale, (float) videoMode.height / viewScale);
 
     renderTexture.create(videoMode.width,videoMode.height);
 
     screenHolder = new ScreenHolder(&window, &renderTexture, &clock);
-
     globals = new Globals(&window);
 }
 

@@ -127,7 +127,10 @@ void HPBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 void HPBar::update(int hp)
 {
-    HPSprite.setScale(sf::Vector2f((float) hp / (float) maxHP * (float) window->getSize().x / 1920, (float) window->getSize().y / 1080));
+    HPSprite.setScale(sf::Vector2f(
+            (float) hp / (float) maxHP * (float) window->getSize().x / 1920,
+            (float) window->getSize().y / 1080
+    ));
 }
 
 

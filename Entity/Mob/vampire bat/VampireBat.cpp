@@ -23,4 +23,5 @@ VampireBat::VampireBat(sf::Vector2f position, sf::RenderWindow *window)
     visibilityDistance = 50;
     hp = 30;
     damage = 5;
+    rangeOfDamageMultiplier = 0.2;
 }
